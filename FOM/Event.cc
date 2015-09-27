@@ -139,7 +139,7 @@ Event::PassesSSOFSelection()
 
   const double wCharge = fLeptons.at(fCandidateLeptonIndex.first)->GetCharge();
   const double fakeCharge = fLeptons.at(fCandidateLeptonIndex.second)->GetCharge();
-  if (wCharge == fakeCharge)  return passed;
+  if (wCharge != fakeCharge)  return passed;
   else  passed = true;
 
   if (passed)  fSelectionLevel = SSOFSelection;
