@@ -14,23 +14,24 @@ class Generic
 public:
 
   Generic(WZEvent* e, TFile* fout = 0);
-  ~Generic();
 
   virtual void Init();
   virtual void Analysis();
+  virtual void Finish();
 
   TH1D* bookTH1D(TString key, TString title, unsigned int nbins, double min, double max);
   TH2D* bookTH2D(TString key, TString title,
                  unsigned int nbinsx, double xmin, double xmax,
                  unsigned int nbinsy, double ymin, double ymax);
 
+  void WriteRootFile();
 
 protected:
 
   WZEvent* fWZEvent;
   
   std::vector<TObject*> fHistos;
-  TFile* outputRootFile;
+  TFile* fOutputRootFile;
 
 };
 

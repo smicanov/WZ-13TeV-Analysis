@@ -66,22 +66,22 @@ void WZSelection::Init()
   for (int i = 1; i <= 4; i++) {
 
     ostringstream outputFileName1;
-    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/test/WZ_FullSelection_" << i << ".txt";
+    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/WZ_FullSelection_" << i << ".txt";
     cout << "File name : " << outputFileName1.str() << endl;
     eventLists1[i-1].open(outputFileName1.str().c_str());
 
     ostringstream outputFileName2;
-    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/test/WZ_WSelection_" << i << ".txt";
+    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/WZ_WSelection_" << i << ".txt";
     cout << "File name : " << outputFileName2.str() << endl;
     eventLists2[i-1].open(outputFileName2.str().c_str());
 
     ostringstream outputFileName3;
-    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/test/WZ_ZSelection_" << i << ".txt";
+    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/WZ_ZSelection_" << i << ".txt";
     cout << "File name : " << outputFileName3.str() << endl;
     eventLists3[i-1].open(outputFileName3.str().c_str());
 
     ostringstream outputFileName4;
-    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/test/WZ_Preselection_test_" << i << ".txt";
+    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/WZ_Preselection_" << i << ".txt";
     cout << "File name : " << outputFileName4.str() << endl;
     eventLists4[i-1].open(outputFileName4.str().c_str());
   }
@@ -96,25 +96,25 @@ void WZSelection::Analysis()
   if (fWZEvent->PassesFullSelection()) {
     yieldsByChannelFullSelection[fWZEvent->GetFinalState()-1]++;
     yieldsByChannelFullSelection[4]++;
-    fWZEvent->DumpEvent(eventLists1[fWZEvent->GetFinalState()-1], 10);
+    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
   }
 
   if (fWZEvent->PassesWSelection()) {
     yieldsByChannelWSelection[fWZEvent->GetFinalState()-1]++;
     yieldsByChannelWSelection[4]++;
-    fWZEvent->DumpEvent(eventLists2[fWZEvent->GetFinalState()-1], 10);
+    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
   }
 
   if (fWZEvent->PassesZSelection()){
     yieldsByChannelZSelection[fWZEvent->GetFinalState()-1]++;
     yieldsByChannelZSelection[4]++;
-    fWZEvent->DumpEvent(eventLists3[fWZEvent->GetFinalState()-1], 7);
+    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
   }
 
   if (fWZEvent->PassesPreselection()) {
     yieldsByChannelPreselection[fWZEvent->GetFinalState()-1]++;
     yieldsByChannelPreselection[4]++;
-    fWZEvent->DumpEvent(eventLists4[fWZEvent->GetFinalState()-1], 5);
+    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
   }
 
   if (!(fWZEvent->PassesFullSelection()))  return;
@@ -160,7 +160,7 @@ void WZSelection::Analysis()
 
     const double ptJet = fWZEvent->jetPt->at(i);
     const double etaJet = fWZEvent->jetEta->at(i);
-    if (!(ptJet > JET_PTMIN) || !(abs(etaJet) < JET_ETAMAX))  continue;
+    if (!(ptJet > JET_PTCUT) || !(abs(etaJet) < JET_ETACUT))  continue;
 
     nSelectedJetsNoIso++;
     const double phiJet = fWZEvent->jetPhi->at(i);
@@ -237,9 +237,12 @@ void WZSelection::Analysis()
 
 void WZSelection::Finish()
 {
-  cout << "Done." << endl;
+  cout << endl << "Done." << endl;
 
-  cout << "CHANNEL \tPreselection \tZ Selection \tW Selection \tFull Selection"<< "\n";
+  cout << "Analyzed events : " << GetNAnalyzed() << "\n"
+       << "Selected events : " << GetNSelected() << "\n\n";
+
+  cout << "CHANNEL\tPreselection\tZ Selection\tW Selection\tFull Selection"<< "\n";
   for (int i = 1; i <= 5; i++) {
     cout << i << "\t" << yieldsByChannelPreselection[i-1]
               << "\t" << yieldsByChannelZSelection[i-1]

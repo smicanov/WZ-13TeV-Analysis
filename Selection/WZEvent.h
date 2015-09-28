@@ -4,7 +4,7 @@
 #define WZBASECLASS EventTree_V07_04_09_01
 
 #include "EventTree_V07_04_09_01.h"
-#include "Leptons.h"
+#include "Particles.h"
 
 #include <vector>
 #include <iostream>
@@ -54,9 +54,9 @@ public:
   Lepton* GetWLepton() { return fLeptons.at(fWLeptonIndex); }
   pair<Lepton*, Lepton*> GetZLeptons();
 
-  void ReadEvent();
+  void Read();
 
-  void DumpEvent(std::ostream& out, int verbosity=0);
+  void Dump(std::ostream& out, int verbosity = 0);
 
 
 protected:
@@ -79,9 +79,10 @@ protected:
 
   vector<Lepton*> fLeptons;
   vector<unsigned int> fTightLeptonsIndex;
-  pair<unsigned int, unsigned int> fZLeptonsIndex;
-  unsigned int fWLeptonIndex;
+  pair<int, int> fZLeptonsIndex;
+  int fWLeptonIndex;
 
 };
 
 #endif
+

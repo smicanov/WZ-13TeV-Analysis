@@ -74,9 +74,6 @@ int main(int argc, char **argv)
   WZSelection* selection = new WZSelection(cWZ, fout);
   selection->Init();
 
-//  WZJets* jets = new WZJets(cWZ, fout);
-//  jets->Init();
-
 // Event loop
   unsigned int nEvents = 0;
 
@@ -84,22 +81,17 @@ int main(int argc, char **argv)
     cerr <<  "  " << int(100 * 100 * (k+1.) / events + 0.5) / 100. << " %            \r" << flush;
     nEvents++;
     wz_tTree->GetEntry(k);
-    cWZ->ReadEvent();
+    cWZ->Read();
 
     selection->Analysis();
-//    jets->Analysis();
   }
+
   cerr << "  100%" << endl << endl;
 
-  cout << "Events : " << nEvents << "\n"
-       << "Analyzed = " << selection->GetNAnalyzed() << "\n"
-       << "Selected events = " << selection->GetNSelected() << "\n\n";
+  cout << "Events read : " << nEvents << endl;
 
   selection->Finish();
-  delete selection;
-  
-//  jets->Finish();
-//  delete jets;
+  selection->WriteRootFile();
 
   fout->Close();
 }

@@ -9,7 +9,7 @@ using namespace std;
 Generic::Generic(WZEvent* wzEvent, TFile* outputFile)
 {
   fWZEvent = wzEvent;
-  outputRootFile = outputFile;
+  fOutputRootFile = outputFile;
 }
 
 
@@ -33,25 +33,35 @@ TH2D* Generic::bookTH2D(TString key, TString title,
 }
 
 
-void Generic::Init()
+void
+Generic::Init()
 {
 
 }
 
 
-void Generic::Analysis()
+void
+Generic::Analysis()
 {
 
 }
 
 
-Generic::~Generic()
+void
+Generic::Finish()
 {
-  cout << "Closing file: writing to ROOT.... \n";
 
-  if (outputRootFile) {
-    outputRootFile->cd();
-    cout << "# objects to write : " << fHistos.size() << endl;
+}
+
+
+void
+Generic::WriteRootFile()
+{
+  cout << "Writing to ROOT.... \n";
+
+  if (fOutputRootFile) {
+    fOutputRootFile->cd();
+    cout << "Objects to write : " << fHistos.size() << endl;
     for (unsigned int i = 0; i < fHistos.size(); i++) {
       if (typeid(*(fHistos.at(i))) == typeid(TH2D))  fHistos.at(i)->Draw();
       else if (typeid(*(fHistos.at(i))) == typeid(TH1D))  fHistos.at(i)->Draw();

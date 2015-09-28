@@ -11,8 +11,8 @@
 #define ELELOOSE_BIT  1
 #define ELEMEDIUM_BIT  2
 #define ELETIGHT_BIT  3
-#define ELE_PTMIN  10.
-#define ELE_ETAMAX  2.5
+#define ELE_PTCUT  10.
+#define ELE_ETACUT  2.5
 
 
 // Cut based ID
@@ -87,10 +87,10 @@
 #define GLOBALMUON_BIT  1
 #define TRACKERMUON_BIT  2
 #define PFMUON_BIT  5
-#define MULOOSE_RELISOMIN  0.2
-#define MUTIGHT_RELISOMIN  0.12
-#define MU_PTMIN  10.
-#define MU_ETAMAX  2.4
+#define RELISO_MU_LOOSE  0.2
+#define RELISO_MU_TIGHT  0.12
+#define MU_PTCUT  10.
+#define MU_ETACUT  2.4
 
 // general
 
@@ -102,29 +102,29 @@
 #define MZ_MIN  60.
 #define MZ_MAX  120.
 #define PDG_ZMASS  91.1876
-#define ZLEADINGLEPTON_PTMIN  20.
+#define ZLEADINGLEPTON_PTCUT  20.
 
 
 // ### W selection ###
 
-#define WLEPTON_PTMIN  20.
-#define WZ_DELTARMIN  0.1
+#define WLEPTON_PTCUT  20.
+#define WZ_DELTARCUT  0.1
 
 
 // ### MET ###
 
-#define METMIN  30.
+#define METCUT  30.
 
 
 // ### total inv. mass of 3 candidate leptons ###
 
-#define MASS3LMIN  100.
+#define MASS3LCUT  100.
 
 
 // ### Jets ###
 
-#define JET_PTMIN  30.
-#define JET_ETAMAX  2.5
+#define JET_PTCUT  30.
+#define JET_ETACUT  2.5
 #define ELEJET_DELTARMIN  0.1
 #define MUJET_DELTARMIN  0.1
 #define LEPTONJET_DELTARMIN  0.1
