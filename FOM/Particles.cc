@@ -144,6 +144,11 @@ Electron::IsLoose()
         fTree->eleConvVeto->at(fIndex) == true)
       loose = true;
   }
+
+  bool looseVID = false;
+  if (fTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT & 1)   looseVID = true;
+  if (loose != looseVID)  cout << "Error: VID different from Cut Based for LOOSE !!!" << endl;
+
   return loose;
 }
 
@@ -186,6 +191,7 @@ Electron::IsFOMLoose()
         fRelIso < RELISO_ENDCAP_LOOSE)
       fomLoose = true;
   }
+
   return fomLoose;
 }
 
@@ -228,6 +234,11 @@ Electron::IsTight()
         fTree->eleConvVeto->at(fIndex) == true)
       tight = true;
   }
+
+  bool tightVID = false;
+  if (fTree->eleIDbit->at(fIndex)>>ELEMEDIUM_BIT & 1)  tightVID = true;
+  if (tight != tightVID)  cout << "Error: VID different from Cut Based for MEDIUM !!!" << endl;
+
   return tight;
 }
 

@@ -50,6 +50,13 @@ Generic::Analysis()
 
 
 void
+Generic::Finish()
+{
+
+}
+
+
+void
 Generic::WriteRootFile()
 {
   cout << "Writing to ROOT.... \n";
