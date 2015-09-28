@@ -106,13 +106,11 @@ Event::PassesPreselection()
   else  fCandidateLeptonIndex.second = indexFakeLeptons.at(0);
 
 // ### put the condition on number of selected leptons here!!! ###
-  if (indexWLeptons.size() + indexFakeLeptons.size() == N_LEPTONS &&
-      nWLeptons == nFakeLeptons &&
+  if ((indexWLeptons.size() + indexFakeLeptons.size()) == N_LEPTONS && nWLeptons == nFakeLeptons &&
       fCandidateLeptonIndex.first != fCandidateLeptonIndex.second &&
-      fCandidateLeptonIndex.first > 0 &&
-      fCandidateLeptonIndex.second > 0 &&
-      fCandidateLeptonIndex.first < (int) fLeptons.size() &&
-      fCandidateLeptonIndex.second < (int) fLeptons.size())
+      !(fCandidateLeptonIndex.first < 0) && !(fCandidateLeptonIndex.second < 0) &&
+      fCandidateLeptonIndex.first < (int)fLeptons.size() &&
+      fCandidateLeptonIndex.second < (int)fLeptons.size())
     passed = true;
 
   if (passed)  fSelectionLevel = Preselection;
@@ -191,10 +189,9 @@ Event::Dump(ostream& out, int verbosity)
 
   if (verbosity > 0) {
     if (fCandidateLeptonIndex.first != fCandidateLeptonIndex.second &&
-        fCandidateLeptonIndex.first > 0 &&
-        fCandidateLeptonIndex.second > 0 &&
-        fCandidateLeptonIndex.first < (int) fLeptons.size() &&
-        fCandidateLeptonIndex.second < (int) fLeptons.size()) {
+        !(fCandidateLeptonIndex.first < 0) && !(fCandidateLeptonIndex.second < 0) &&
+        fCandidateLeptonIndex.first < (int)fLeptons.size() &&
+        fCandidateLeptonIndex.second < (int)fLeptons.size()) {
       Lepton* wLepton = fLeptons.at(fCandidateLeptonIndex.first);
       Lepton* fakeLepton = fLeptons.at(fCandidateLeptonIndex.second);
 
