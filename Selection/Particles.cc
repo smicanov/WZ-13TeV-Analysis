@@ -146,8 +146,11 @@ Electron::IsLoose()
   }
 
   bool looseVID = false;
-  if (fWZTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT & 1)   looseVID = true;
-  if (loose != looseVID)  cout << "Error: VID different from Cut Based for LOOSE !!!" << endl;
+  if (fWZTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT&1)  looseVID = true;
+  if (loose != looseVID) {
+    cout << "Error: VID different from Cut Based for Ele LOOSE !!!" << endl;
+    cout << "VID : " << looseVID << ", Cut Based : " << loose << endl;
+  }
 
   return loose;
 }
@@ -192,9 +195,12 @@ Electron::IsTight()
       tight = true;
   }
 
-  bool tightVID = false;
-  if (fWZTree->eleIDbit->at(fIndex)>>ELEMEDIUM_BIT & 1)  tightVID = true;
-  if (tight != tightVID)  cout << "Error: VID different from Cut Based for MEDIUM !!!" << endl;
+  bool mediumVID = false;
+  if (fWZTree->eleIDbit->at(fIndex)>>ELEMEDIUM_BIT&1)  mediumVID = true;
+  if (tight != mediumVID) {
+    cout << "Error: VID different from Cut Based for Ele MEDIUM !!!" << endl;
+    cout << "VID : " << mediumVID << ", Cut Based: " << tight << endl;
+  }
 
   return tight;
 }
