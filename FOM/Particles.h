@@ -53,8 +53,9 @@ public:
 
   Lepton(unsigned int index, double pt, double eta, double phi, double ch);
 
-  virtual bool IsFOMLoose() = 0;
+  virtual bool IsMedium() = 0;
   virtual bool IsTight() = 0;
+  virtual bool IsFOMLoose() = 0;
 
   int GetPdgId() { return fPdgId; }
   double GetCharge() { return fCharge; }
@@ -78,8 +79,10 @@ public:
   Electron(unsigned int ind, double pt, double eta, double phi, double ch);
 
   bool IsLoose();
-  bool IsFOMLoose();
+  bool IsMedium();
   bool IsTight();
+  bool IsFOMLoose();
+
   bool PassesPtCut();
   bool PassesEtaCut();
 
@@ -94,8 +97,10 @@ public:
   Muon(unsigned int ind, double pt, double eta, double phi, double ch);
 
   bool IsLoose();
-  bool IsFOMLoose();
+  bool IsMedium();
   bool IsTight();
+  bool IsFOMLoose();
+
   bool PassesPtCut();
   bool PassesEtaCut();
 

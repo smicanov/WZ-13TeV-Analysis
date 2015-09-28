@@ -146,13 +146,113 @@ Electron::IsLoose()
   }
 
   bool looseVID = false;
-  if (fTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT&1)  looseVID = true;
+  if (fTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT & 1)  looseVID = true;
   if (loose != looseVID) {
     cout << "Error: VID different from Cut Based for Ele LOOSE !!!" << endl;
     cout << "VID : " << looseVID << ", Cut Based : " << loose << endl;
   }
 
   return loose;
+}
+
+
+bool
+Electron::IsMedium()
+{
+  bool medium = false;
+
+  if (fTree == 0) {
+    cout << "Tree pointer is ZERO!!!! \n";
+    return medium;
+  }
+
+  if (!(fTree->nEle))  return medium;
+
+  const double absEleSCEta = abs(fTree->eleSCEta->at(fIndex));
+  if (absEleSCEta <= ETASCBARREL) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_MEDIUM &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_BARREL_MEDIUM &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_BARREL_MEDIUM &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_BARREL_MEDIUM &&
+        fRelIso < RELISO_BARREL_MEDIUM &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_BARREL_MEDIUM &&
+        abs(fTree->eleD0->at(fIndex)) < D0_BARREL_MEDIUM &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_MEDIUM &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      medium = true;
+  } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_MEDIUM &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_MEDIUM &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_ENDCAP_MEDIUM &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_ENDCAP_MEDIUM &&
+        fRelIso < RELISO_ENDCAP_MEDIUM &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_ENDCAP_MEDIUM &&
+        abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_MEDIUM &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_MEDIUM &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      medium = true;
+  }
+
+  bool mediumVID = false;
+  if (fTree->eleIDbit->at(fIndex)>>ELEMEDIUM_BIT & 1)  mediumVID = true;
+  if (medium != mediumVID) {
+    cout << "Error: VID different from Cut Based for Ele MEDIUM !!!" << endl;
+    cout << "VID : " << mediumVID << "; Cut Based : " << medium << endl;
+  }
+
+  return medium;
+}
+
+
+bool
+Electron::IsTight()
+{
+  bool tight = false;
+
+  if (fTree == 0) {
+    cout << "Tree pointer is ZERO!!!! \n";
+    return tight;
+  }
+
+  if (!(fTree->nEle))  return tight;
+
+  const double absEleSCEta = abs(fTree->eleSCEta->at(fIndex));
+  if (absEleSCEta <= ETASCBARREL) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_TIGHT &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_BARREL_TIGHT &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_BARREL_TIGHT &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_BARREL_TIGHT &&
+        fRelIso < RELISO_BARREL_TIGHT &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_BARREL_TIGHT &&
+        abs(fTree->eleD0->at(fIndex)) < D0_BARREL_TIGHT &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_TIGHT &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      tight = true;
+  } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_TIGHT &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_TIGHT &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_ENDCAP_TIGHT &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_ENDCAP_TIGHT &&
+        fRelIso < RELISO_ENDCAP_TIGHT &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_ENDCAP_TIGHT &&
+        abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_TIGHT &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_TIGHT &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      tight = true;
+  }
+
+  bool tightVID = false;
+  if (fTree->eleIDbit->at(fIndex)>>ELETIGHT_BIT & 1)  tightVID = true;
+  if (tight != tightVID) {
+    cout << "Error: VID different from Cut Based for Ele TIGHT !!!" << endl;
+    cout << "VID : " << tightVID << "; Cut Based : " << tight << endl;
+  }
+
+  return tight;
 }
 
 
@@ -178,8 +278,8 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_BARREL_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
-        fTree->eleConvVeto->at(fIndex) == true &&
-        fRelIso < RELISO_BARREL_LOOSE)
+        fTree->eleConvVeto->at(fIndex) == true/* &&
+        fRelIso < RELISO_BARREL_LOOSE*/)
       fomLoose = true;
   } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
     if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_MEDIUM &&
@@ -190,62 +290,12 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
-        fTree->eleConvVeto->at(fIndex) == true &&
-        fRelIso < RELISO_ENDCAP_LOOSE)
+        fTree->eleConvVeto->at(fIndex) == true/* &&
+        fRelIso < RELISO_ENDCAP_LOOSE*/)
       fomLoose = true;
   }
 
   return fomLoose;
-}
-
-
-bool
-Electron::IsTight()
-{
-  bool tight = false;
-
-  if (fTree == 0) {
-    cout << "Tree pointer is ZERO!!!! \n";
-    return tight;
-  }
-
-  if (!(fTree->nEle))  return tight;
-
-  const double absEleSCEta = abs(fTree->eleSCEta->at(fIndex));
-  if (absEleSCEta <= ETASCBARREL) {
-    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_MEDIUM &&
-        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_BARREL_MEDIUM &&
-        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_BARREL_MEDIUM &&
-        fTree->eleHoverE->at(fIndex) < HOVERE_BARREL_MEDIUM &&
-        fRelIso < RELISO_BARREL_MEDIUM &&
-        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_BARREL_MEDIUM &&
-        abs(fTree->eleD0->at(fIndex)) < D0_BARREL_MEDIUM &&
-        abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_MEDIUM &&
-        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
-        fTree->eleConvVeto->at(fIndex) == true)
-      tight = true;
-  } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
-    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_MEDIUM &&
-        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_MEDIUM &&
-        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_ENDCAP_MEDIUM &&
-        fTree->eleHoverE->at(fIndex) < HOVERE_ENDCAP_MEDIUM &&
-        fRelIso < RELISO_ENDCAP_MEDIUM &&
-        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_ENDCAP_MEDIUM &&
-        abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_MEDIUM &&
-        abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_MEDIUM &&
-        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
-        fTree->eleConvVeto->at(fIndex) == true)
-      tight = true;
-  }
-
-  bool mediumVID = false;
-  if (fTree->eleIDbit->at(fIndex)>>ELEMEDIUM_BIT&1)  mediumVID = true;
-  if (tight != mediumVID) {
-    cout << "Error: VID different from Cut Based for Ele MEDIUM !!!" << endl;
-    cout << "VID : " << mediumVID << "; Cut Based : " << tight << endl;
-  }
-
-  return tight;
 }
 
 
@@ -293,40 +343,54 @@ Muon::IsLoose()
 
   if (!(fTree->nMu))  return loose;
 
-  if ((fTree->muType->at(fIndex)>>GLOBALMUON_BIT&1 || fTree->muType->at(fIndex)>>TRACKERMUON_BIT&1) &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT&1 &&
+  if ((fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 || fTree->muType->at(fIndex)>>TRACKERMUON_BIT & 1) &&
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
       fRelIso < MU_RELISO_LOOSE)
     loose = true;
-
+/*
+  bool looseVID = false;
+  if (fTree->muIsLooseID->at(fIndex))  looseVID = true;
+  if (loose != looseVID) {
+    cout << "Error: VID different from Cut Based for Mu LOOSE !!!" << endl;
+    cout << "VID : " << looseVID << ", Cut Based : " << loose << endl;
+  }
+*/
   return loose;
 }
 
 
 bool
-Muon::IsFOMLoose()
+Muon::IsMedium()
 {
-  bool fomLoose = false;
+  bool medium = false;
 
   if (fTree == 0) {
     cout << "Tree pointer is ZERO!!!! \n";
-    return fomLoose;
+    return medium;
   }
 
-  if (!(fTree->nMu))  return fomLoose;
+  if (!(fTree->nEle))  return medium;
 
-  if (fTree->muChi2NDF->at(fIndex) < 10. &&
-      fTree->muMuonHits->at(fIndex) > 0 &&
-      fTree->muStations->at(fIndex) > 1 &&
-      abs(fTree->muD0->at(fIndex)) < 0.2 &&
-      abs(fTree->muDz->at(fIndex)) < 0.5 &&
-      fTree->muPixelHits->at(fIndex) > 0 &&
-      fTree->muTrkLayers->at(fIndex) > 5 &&
-      fTree->muType->at(fIndex)>>GLOBALMUON_BIT&1 &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT&1 &&
-      fRelIso < MU_RELISO_LOOSE)
-    fomLoose = true;
+  bool good = false;
+  if (fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
+      fTree->muChi2NDF->at(fIndex) < 3. &&
+      fTree->muchi2LocalPosition->at(fIndex) < 12. &&
+      fTree->mutrkKink->at(fIndex) < 20. &&
+      fTree->musegmentCompatibility->at(fIndex) > 0.303)
+    good = true;
 
-  return fomLoose;
+  if (IsLoose() && fTree->muInnervalidFraction->at(fIndex) > 0.8 &&
+      (good || fTree->musegmentCompatibility->at(fIndex) > 0.451))
+    medium = true;
+/*
+  bool mediumVID = false;
+  if (fTree->muIsMediumID->at(fIndex))  mediumVID = true;
+  if (medium != mediumVID) {
+    cout << "Error: VID different from Cut Based for Mu MEDIUM !!!" << endl;
+    cout << "VID : " << mediumVID << ", Cut Based : " << medium << endl;
+  }
+*/
+  return medium;
 }
 
 
@@ -349,12 +413,47 @@ Muon::IsTight()
       abs(fTree->muDz->at(fIndex)) < 0.5 &&
       fTree->muPixelHits->at(fIndex) > 0 &&
       fTree->muTrkLayers->at(fIndex) > 5 &&
-      fTree->muType->at(fIndex)>>GLOBALMUON_BIT&1 &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT&1 &&
+      fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
       fRelIso < MU_RELISO_TIGHT)
     tight = true;
-
+/*
+  bool tightVID = false;
+  if (fTree->muIsTightID->at(fIndex))  tightVID = true;
+  if (tight != tightVID) {
+    cout << "Error: VID different from Cut Based for Mu TIGHT !!!" << endl;
+    cout << "VID : " << tightVID << ", Cut Based : " << tight << endl;
+  }
+*/
   return tight;
+}
+
+
+bool
+Muon::IsFOMLoose()
+{
+  bool fomLoose = false;
+
+  if (fTree == 0) {
+    cout << "Tree pointer is ZERO!!!! \n";
+    return fomLoose;
+  }
+
+  if (!(fTree->nMu))  return fomLoose;
+
+  if (fTree->muChi2NDF->at(fIndex) < 10. &&
+      fTree->muMuonHits->at(fIndex) > 0 &&
+      fTree->muStations->at(fIndex) > 1 &&
+      abs(fTree->muD0->at(fIndex)) < 0.2 &&
+      abs(fTree->muDz->at(fIndex)) < 0.5 &&
+      fTree->muPixelHits->at(fIndex) > 0 &&
+      fTree->muTrkLayers->at(fIndex) > 5 &&
+      fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1/* &&
+      fRelIso < MU_RELISO_LOOSE*/)
+    fomLoose = true;
+
+  return fomLoose;
 }
 
 

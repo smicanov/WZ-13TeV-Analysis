@@ -99,14 +99,14 @@
 // ### W and fake lepton selections ###
 
 #define WLEPTON_PTCUT  20.
-#define FAKELEPTON_PTCUT  20.
+#define FAKELEPTON_PTCUT  10.
 #define WFAKE_DELTARCUT  0.1
 
 
 // ### missing Et, Mt & M(2l) ###
 
 #define METCUT  30.
-#define MTCUT  40.
+#define MTCUT  0.
 #define MASS2LCUT  0.
 
 

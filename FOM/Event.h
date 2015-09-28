@@ -12,9 +12,11 @@
 
 enum FinalState
 {
-  undefined,   // 0
-  WEleFakeMu,  // 1
-  WMuFakeEle   // 2
+  undefined,    // 0
+  WEleFakeEle,  // 1
+  WEleFakeMu,   // 2
+  WMuFakeEle,   // 3
+  WMuFakeMu     // 4
 };
 
 
@@ -23,8 +25,9 @@ enum SelectionLevel
   Undefined,            // 0
   FailsPreselection,    // 1
   Preselection,         // 2
-  SSOFSelection,        // 3
-  FullSelection         // 4
+  SSSelection,          // 3
+  OFSelection,          // 4
+  FullSelection         // 5
 };
 
 
@@ -38,14 +41,15 @@ public:
   Event(TTree* tree);
 
   bool PassesPreselection();
-  bool PassesSSOFSelection();
+  bool PassesSSSelection();
+  bool PassesOFSelection();
   bool PassesFullSelection();
 
   FinalState GetFinalState() { return fFinalState; }
   SelectionLevel GetSelectionLevel() { return fSelectionLevel; }
 
   void Read();
-  void Dump(std::ostream& out, int verbosity=0);
+  void Dump(std::ostream& out, int verbosity = 0);
 
 
 protected:

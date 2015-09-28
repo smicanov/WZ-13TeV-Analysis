@@ -24,23 +24,42 @@ protected:
   unsigned int nAnalyzedEvents;
   unsigned int nSelectedEvents;
 
-  unsigned int yieldsByChannelPreselection[4];
-  unsigned int yieldsByChannelSSOFSelection[4];
-  unsigned int yieldsByChannelFullSelection[4];
+  unsigned int yieldsByChannelPreselection[6];
+  unsigned int yieldsByChannelSSSelection[6];
+  unsigned int yieldsByChannelOFSelection[6];
+  unsigned int yieldsByChannelFullSelection[6];
 
 /*
-  std::ofstream eventLists2[2];
-  std::ofstream eventLists3[2];
-  std::ofstream eventLists4[2];
+  std::ofstream eventLists1[4];
+  std::ofstream eventLists2[4];
+  std::ofstream eventLists3[4];
+  std::ofstream eventLists4[4];
 */
 
-  TH1D* hWPt[4];
-  TH1D* hFakePt[4];
-  TH1D* hDeltaRWFake[4];
+  TH1D* hWPt[6];
+  TH1D* hWEta[6];
+  TH1D* hWPhi[6];
+  TH1D* hWRelIso[6];
 
-  TH1D* hMET[4];
-  TH1D* hMt[4];
-  TH1D* h2LMass[4];
+  TH1D* hFakePt[6];
+  TH1D* hFakeEta[6];
+  TH1D* hFakePhi[6];
+  TH1D* hFakeRelIso[6];
+
+  TH1D* hDeltaPhiWFake[6];
+  TH1D* hDeltaRWFake[6];
+
+  TH1D* hMET[6];
+  TH1D* hMETPhi[6];
+
+  TH1D* hDeltaRWMET[6];
+  TH1D* hDeltaPhiWMET[6];
+
+  TH1D* hDeltaRFakeMET[6];
+  TH1D* hDeltaPhiFakeMET[6];
+
+  TH1D* hMt[6];
+  TH1D* h2LMass[6];
 
 };
 

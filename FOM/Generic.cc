@@ -67,7 +67,7 @@ Generic::WriteRootFile()
     for (unsigned int i = 0; i < fHistos.size(); i++) {
       if (typeid(*(fHistos.at(i))) == typeid(TH2D))  fHistos.at(i)->Draw();
       else if (typeid(*(fHistos.at(i))) == typeid(TH1D))  fHistos.at(i)->Draw();
-      cout << "Writing object : " << fHistos.at(i)->GetName() << endl;
+//      cout << "Writing object : " << fHistos.at(i)->GetName() << endl;
       fHistos.at(i)->Write();
     }
   }

@@ -88,7 +88,7 @@ Event::PassesPreselection()
   for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
     if ((*lIt)->PassesPtCut() && (*lIt)->PassesEtaCut() && (*lIt)->IsFOMLoose()) {
       unsigned int index = distance(fLeptons.begin(), lIt);
-      if ((int) index == fCandidateLeptonIndex.first)  continue;
+      if ((int)index == fCandidateLeptonIndex.first)  continue;
       else {
         nFakeLeptons++;
         indexFakeLeptons.push_back(index);
@@ -106,41 +106,64 @@ Event::PassesPreselection()
   else  fCandidateLeptonIndex.second = indexFakeLeptons.at(0);
 
 // ### put the condition on number of selected leptons here!!! ###
-  if ((indexWLeptons.size() + indexFakeLeptons.size()) == N_LEPTONS && nWLeptons == nFakeLeptons &&
+  if (indexWLeptons.size() + indexFakeLeptons.size() == N_LEPTONS &&
+      nWLeptons == nFakeLeptons &&
       fCandidateLeptonIndex.first != fCandidateLeptonIndex.second &&
       !(fCandidateLeptonIndex.first < 0) && !(fCandidateLeptonIndex.second < 0) &&
       fCandidateLeptonIndex.first < (int)fLeptons.size() &&
       fCandidateLeptonIndex.second < (int)fLeptons.size())
     passed = true;
 
-  if (passed)  fSelectionLevel = Preselection;
+  if (passed) {
+    fSelectionLevel = Preselection;
+    const unsigned int wFlavor = fLeptons.at(fCandidateLeptonIndex.first)->GetPdgId();
+    const unsigned int fakeFlavor = fLeptons.at(fCandidateLeptonIndex.second)->GetPdgId();
+    if (wFlavor == 11) {
+      if      (fakeFlavor == 11)  fFinalState = WEleFakeEle;
+      else if (fakeFlavor == 13)  fFinalState = WEleFakeMu;
+    } else if (wFlavor == 13) {
+      if      (fakeFlavor == 11)  fFinalState = WMuFakeEle;
+      else if (fakeFlavor == 13)  fFinalState = WMuFakeMu;
+    }
+  }
 
   return passed;
 }
 
 
 bool
-Event::PassesSSOFSelection()
+Event::PassesSSSelection()
 {
-  if (!(fSelectionLevel < SSOFSelection))  return true;
+  if (!(fSelectionLevel < SSSelection))  return true;
 
   bool passed = false;
   if (!PassesPreselection())  return passed;
-
-  const unsigned int wFlavor = fLeptons.at(fCandidateLeptonIndex.first)->GetPdgId();
-  const unsigned int fakeFlavor = fLeptons.at(fCandidateLeptonIndex.second)->GetPdgId();
-  if (wFlavor == fakeFlavor)  return passed;
-  else {
-    if      (wFlavor == 11)  fFinalState = WEleFakeMu;
-    else if (wFlavor == 13)  fFinalState = WMuFakeEle;
-  }
 
   const double wCharge = fLeptons.at(fCandidateLeptonIndex.first)->GetCharge();
   const double fakeCharge = fLeptons.at(fCandidateLeptonIndex.second)->GetCharge();
   if (wCharge != fakeCharge)  return passed;
   else  passed = true;
 
-  if (passed)  fSelectionLevel = SSOFSelection;
+  if (passed)  fSelectionLevel = SSSelection;
+
+  return passed;
+}
+
+
+bool
+Event::PassesOFSelection()
+{
+  if (!(fSelectionLevel < OFSelection))  return true;
+
+  bool passed = false;
+  if (!PassesPreselection() || !PassesSSSelection())  return passed;
+
+  const unsigned int wFlavor = fLeptons.at(fCandidateLeptonIndex.first)->GetPdgId();
+  const unsigned int fakeFlavor = fLeptons.at(fCandidateLeptonIndex.second)->GetPdgId();
+  if (wFlavor == fakeFlavor)  return passed;
+  else  passed = true;
+
+  if (passed)  fSelectionLevel = OFSelection;
 
   return passed;
 }
@@ -152,7 +175,7 @@ Event::PassesFullSelection()
   if (!(fSelectionLevel < FullSelection))  return true;
 
   bool passed = false;
-  if (!PassesPreselection() || !PassesSSOFSelection())  return passed;
+  if (!PassesPreselection() || !PassesSSSelection() || !PassesOFSelection())  return passed;
 
   const double wPt = fLeptons.at(fCandidateLeptonIndex.first)->Pt();
   const double fakePt = fLeptons.at(fCandidateLeptonIndex.second)->Pt();
