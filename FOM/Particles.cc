@@ -278,8 +278,8 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_BARREL_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
-        fTree->eleConvVeto->at(fIndex) == true/* &&
-        fRelIso < RELISO_BARREL_LOOSE*/)
+        fTree->eleConvVeto->at(fIndex) == true &&
+        fRelIso < RELISO_BARREL_LOOSE)
       fomLoose = true;
   } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
     if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_MEDIUM &&
@@ -290,8 +290,8 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
-        fTree->eleConvVeto->at(fIndex) == true/* &&
-        fRelIso < RELISO_ENDCAP_LOOSE*/)
+        fTree->eleConvVeto->at(fIndex) == true &&
+        fRelIso < RELISO_ENDCAP_LOOSE)
       fomLoose = true;
   }
 
@@ -343,18 +343,22 @@ Muon::IsLoose()
 
   if (!(fTree->nMu))  return loose;
 
+  bool looseCut = false;
   if ((fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 || fTree->muType->at(fIndex)>>TRACKERMUON_BIT & 1) &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
-      fRelIso < MU_RELISO_LOOSE)
-    loose = true;
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1)
+    looseCut = true;
+
 /*
   bool looseVID = false;
   if (fTree->muIsLooseID->at(fIndex))  looseVID = true;
-  if (loose != looseVID) {
+  if (looseCut != looseVID) {
     cout << "Error: VID different from Cut Based for Mu LOOSE !!!" << endl;
-    cout << "VID : " << looseVID << ", Cut Based : " << loose << endl;
+    cout << "VID : " << looseVID << ", Cut Based : " << looseCut << endl;
   }
 */
+
+  if (looseCut && fRelIso < MU_RELISO_LOOSE)  loose = true;
+
   return loose;
 }
 
@@ -362,14 +366,14 @@ Muon::IsLoose()
 bool
 Muon::IsMedium()
 {
-  bool medium = false;
+  bool mediumCut = false;
 
   if (fTree == 0) {
     cout << "Tree pointer is ZERO!!!! \n";
-    return medium;
+    return mediumCut;
   }
 
-  if (!(fTree->nEle))  return medium;
+  if (!(fTree->nEle))  return mediumCut;
 
   bool good = false;
   if (fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
@@ -381,16 +385,16 @@ Muon::IsMedium()
 
   if (IsLoose() && fTree->muInnervalidFraction->at(fIndex) > 0.8 &&
       (good || fTree->musegmentCompatibility->at(fIndex) > 0.451))
-    medium = true;
+    mediumCut = true;
 /*
   bool mediumVID = false;
   if (fTree->muIsMediumID->at(fIndex))  mediumVID = true;
-  if (medium != mediumVID) {
+  if (mediumCut != mediumVID) {
     cout << "Error: VID different from Cut Based for Mu MEDIUM !!!" << endl;
-    cout << "VID : " << mediumVID << ", Cut Based : " << medium << endl;
+    cout << "VID : " << mediumVID << ", Cut Based : " << mediumCut << endl;
   }
 */
-  return medium;
+  return mediumCut;
 }
 
 
@@ -406,6 +410,7 @@ Muon::IsTight()
 
   if (!(fTree->nMu))  return tight;
 
+  bool tightCut = false;
   if (fTree->muChi2NDF->at(fIndex) < 10. &&
       fTree->muMuonHits->at(fIndex) > 0 &&
       fTree->muStations->at(fIndex) > 1 &&
@@ -414,17 +419,20 @@ Muon::IsTight()
       fTree->muPixelHits->at(fIndex) > 0 &&
       fTree->muTrkLayers->at(fIndex) > 5 &&
       fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
-      fRelIso < MU_RELISO_TIGHT)
-    tight = true;
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1)
+    tightCut = true;
+
 /*
   bool tightVID = false;
   if (fTree->muIsTightID->at(fIndex))  tightVID = true;
-  if (tight != tightVID) {
+  if (tightCut != tightVID) {
     cout << "Error: VID different from Cut Based for Mu TIGHT !!!" << endl;
-    cout << "VID : " << tightVID << ", Cut Based : " << tight << endl;
+    cout << "VID : " << tightVID << ", Cut Based : " << tightCut << endl;
   }
 */
+
+  if (tightCut && fRelIso < MU_RELISO_TIGHT)  tight = true;
+
   return tight;
 }
 
@@ -449,8 +457,8 @@ Muon::IsFOMLoose()
       fTree->muPixelHits->at(fIndex) > 0 &&
       fTree->muTrkLayers->at(fIndex) > 5 &&
       fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT & 1/* &&
-      fRelIso < MU_RELISO_LOOSE*/)
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
+      fRelIso < MU_RELISO_LOOSE)
     fomLoose = true;
 
   return fomLoose;

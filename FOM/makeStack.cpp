@@ -75,9 +75,9 @@ MakeStack(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM
 
   stack->Draw();
   stack->GetXaxis()->SetTitle(xAxisTitle);
-  if (binWidth > 0.1)  stack->GetYaxis()->SetTitle(Form("Events / %1.1f GeV", binWidth));
-  else if (binWidth > 0. && binWidth <= 0.1)
-    stack->GetYaxis()->SetTitle(Form("Events / %1.2f", binWidth));
+  if (binWidth >= 0.1)  stack->GetYaxis()->SetTitle(Form("Events / %1.1f GeV", binWidth));
+  else if (binWidth > 0. && binWidth < 0.1)
+    stack->GetYaxis()->SetTitle(Form("Events / %1.3f", binWidth));
   else  stack->GetYaxis()->SetTitle("Events");
 
   stack->GetXaxis()->SetLabelFont(132);
@@ -121,9 +121,11 @@ MakeStack(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM
 
   latexLabel.SetTextSize(0.05);
   if (channel == 0) latexLabel.DrawLatex(0.44, 0.95, "#font[132]{Channel undefined}");
-  if (channel == 1) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W ele - Fake #mu}");
-  if (channel == 2) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W #mu - Fake ele}");
-  if (channel == 3) latexLabel.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
+  if (channel == 1) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W ele - Fake ele}");
+  if (channel == 2) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W ele - Fake #mu}");
+  if (channel == 3) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W #mu - Fake ele}");
+  if (channel == 4) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W #mu - Fake #mu}");
+  if (channel == 5) latexLabel.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
 
   return 1;
 }
@@ -482,9 +484,11 @@ MakeSignificanceGraphs(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW,
   latexLabel_sF.DrawLatex(0.8, 0.9, "Signal Fraction");
 
   if (channel == 0) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel undefined}");
-  if (channel == 1) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake #mu}");
-  if (channel == 2) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake ele}");
-  if (channel == 3) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
+  if (channel == 1) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake ele}");
+  if (channel == 2) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake #mu}");
+  if (channel == 3) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake ele}");
+  if (channel == 4) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake #mu}");
+  if (channel == 5) latexLabel_sF.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
 
   canvas->cd(2);
   TGraph* g_significance_WJets = new TGraph(xValues.size(), &xValues.at(0), &significances_WJets.at(0));
@@ -561,9 +565,11 @@ MakeSignificanceGraphs(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW,
   latexLabel_significance.DrawLatex(0.82, 0.9, "Significance");
 
   if (channel == 0) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel undefined}");
-  if (channel == 1) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake #mu}");
-  if (channel == 2) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake ele}");
-  if (channel == 3) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
+  if (channel == 1) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake ele}");
+  if (channel == 2) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W ele - Fake #mu}");
+  if (channel == 3) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake ele}");
+  if (channel == 4) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{Channel W #mu - Fake #mu}");
+  if (channel == 5) latexLabel_significance.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
 
   return 1;
 }
@@ -574,25 +580,38 @@ main()
 {
   const MyStyle rootStyle(600);
 
-  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/WZ.root");
-  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/ZZ4L.root");
-  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/ZZ2L2Q.root");
-  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/WW.root");
-  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/DYM50.root");
-  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/TT.root");
-  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/DYM10to50.root");
-  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/WJets.root");
+  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WZ.root");
+  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/ZZ4L.root");
+  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/ZZ2L2Q.root");
+  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WW.root");
+  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/DYM50.root");
+  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/TT.root");
+  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/DYM10to50.root");
+  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WJets.root");
 
-  unsigned int n = 4;
+  unsigned int n = 6;
 
-  vector<string> histoName = { "WPt", "FakePt", "DeltaRWFake", "MET", "Mt", "2LMass" };
+  vector<string> histoName =
+    { "WPt", "WEta", "WPhi", "WRelIso",
+      "FakePt", "FakeEta", "FakePhi", "FakeRelIso",
+      "DeltaPhiWFake", "DeltaRWFake",
+      "MET", "METPhi",
+      "DeltaPhiWMET", "DeltaRWMET",
+      "DeltaPhiFakeMET", "DeltaRFakeMET",
+      "Mt", "2LMass" };
 //  vector<string> jetsName = { "NJets", "NJetsNoMuIso", "NJetsNoEleIso", "NJetsNoIso" };
-  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/plots/stack/";
+  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/plots/stack/";
   vector<string> xAxisHisto =
-    { "W lepton p_{t} [GeV]", "Fake lepton p_{t} [GeV]", "#DeltaR (Wl, Fakel)",
-      "missing E_{t} [GeV]", "M_{t} [GeV]", "mass_{2l} [GeV]" };
+    { "W lepton p_{t} [GeV]", "W lepton #eta", "W lepton #Phi", "W lepton relIso",
+      "Fake lepton p_{t} [GeV]", "Fake lepton #eta", "Fake lepton #Phi", "Fake lepton relIso",
+      "|#Delta#Phi (Wl, Fakel)|", "#DeltaR (Wl, Fakel)",
+      "missing E_{t} [GeV]", "missing E_{t} #Phi" ,
+      "|#Delta#Phi (Wl, miss E_{t})|", "#DeltaR (Wl, miss E_{t})",
+      "|#Delta#Phi (Fakel, miss E_{t})|", "#DeltaR (Fakel, miss E_{t})",
+       "M_{t} [GeV]", "mass_{2l} [GeV]" };
 //  const string xAxisJets = "Number of Jets";
-  vector<double> binWidthHisto = { 2.0, 2.0, 0.05, 2.0, 2.0, 2.0 };
+  vector<double> binWidthHisto = { 2.0, 0.1, 0.087267, 0.002, 1.0, 0.1, 0.087267, 0.002, 0.04363, 0.05,
+                                   2.0, 0.087267, 0.04363, 0.05, 0.04363, 0.05, 2.0, 2.0 };
 
   for (unsigned int histo = 0; histo < histoName.size(); histo++) {
     TCanvas* canvas[n];
@@ -640,13 +659,13 @@ main()
   }
 */
 
-  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/Preselection/plots/cuts/";
+  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/plots/cuts/";
   vector<string> graphName = { "WPt", "FakePt", "DeltaRWFake", "MET", "Mt", "2LMass" };
   vector<string> xAxisGraph = { "W lepton p_{t} [GeV]", "Fake lepton p_{t} [GeV]", "#DeltaR (Wl, Fakel)",
                                 "missing E_{t} [GeV]", "M_{t} [GeV]", "mass_{2l} [GeV]" };
   vector<double> startGraph = { 0., 0., 0., 0., 0., 0. };
-  vector<double> endGraph = { 200., 200., 5., 200., 200., 200. };
-  vector<double> binWidthGraph = { 2., 2., 0.05, 2., 2., 2. };
+  vector<double> endGraph = { 200., 100., 5., 200., 200., 200. };
+  vector<double> binWidthGraph = { 2., 1., 0.05, 2., 2., 2. };
   for (unsigned int graph = 0; graph < graphName.size(); graph++) {
     TCanvas* canvas[n];
     for (unsigned int i = 0; i < n; i++) {

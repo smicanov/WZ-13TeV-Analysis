@@ -31,7 +31,7 @@ void WJetsSelection::Init()
     hWPhi[i] = bookTH1D(("hWPhi_" + boost::lexical_cast<string>(i)).c_str(),
                         "W lepton #phi", 72, -3.1416, 3.1416);
     hWRelIso[i] = bookTH1D(("hWRelIso_" + boost::lexical_cast<string>(i)).c_str(),
-                           "W lepton relIso", 100, 0, 2);
+                           "W lepton relIso", 100, 0, 0.2);
 
     hFakePt[i] = bookTH1D(("hFakePt_" + boost::lexical_cast<string>(i)).c_str(),
                           "Fake lepton p_{t}", 100, 0, 100);
@@ -40,11 +40,11 @@ void WJetsSelection::Init()
     hFakePhi[i] = bookTH1D(("hFakePhi_" + boost::lexical_cast<string>(i)).c_str(),
                            "Fake lepton #phi", 72, -3.1416, 3.1416);
     hFakeRelIso[i] = bookTH1D(("hFakeRelIso_" + boost::lexical_cast<string>(i)).c_str(),
-                              "Fake lepton relIso", 100, 0, 2);
+                              "Fake lepton relIso", 100, 0, 3);
 
 
     hDeltaPhiWFake[i] = bookTH1D(("hDeltaPhiWFake_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (W, Fake)|", 72, 0, 6.2832);
+                                 "|#Delta#Phi (W, Fake)|", 72, 0, 3.1416);
     hDeltaRWFake[i] = bookTH1D(("hDeltaRWFake_" + boost::lexical_cast<string>(i)).c_str(),
                                "#DeltaR (W, Fake)", 100, 0, 5);
 
@@ -54,12 +54,12 @@ void WJetsSelection::Init()
                           "Missing E_{t} #phi", 100, -3.1416, 3.1416);
 
     hDeltaPhiWMET[i] = bookTH1D(("hDeltaPhiWMET_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (W, miss E_{t})|", 72, 0, 6.2832);
+                                 "|#Delta#Phi (W, miss E_{t})|", 72, 0, 3.1416);
     hDeltaRWMET[i] = bookTH1D(("hDeltaRWMET_" + boost::lexical_cast<string>(i)).c_str(),
                                "#DeltaR (W, miss E_{t})", 100, 0, 5);
 
     hDeltaPhiFakeMET[i] = bookTH1D(("hDeltaPhiFakeMET_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (Fake, miss E_{t})|", 72, 0, 6.2832);
+                                 "|#Delta#Phi (Fake, miss E_{t})|", 72, 0, 3.1416);
     hDeltaRFakeMET[i] = bookTH1D(("hDeltaRFakeMET_" + boost::lexical_cast<string>(i)).c_str(),
                                "#DeltaR (Fake, miss E_{t})", 100, 0, 5);
 
@@ -133,7 +133,6 @@ void WJetsSelection::Analysis()
 
   if (!(fEvent->PassesPreselection()))  return;
 //  if (!(fEvent->PassesSSSelection()))  return;
-//  if (!(fEvent->PassesOFSelection()))  return;
 //  if (!(fEvent->PassesFullSelection()))  return;
 
   nSelectedEvents++;

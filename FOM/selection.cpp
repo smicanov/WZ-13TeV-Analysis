@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 // OUTPUT ROOT FILE
   TFile* outputFile;
   if (gotOutput)  outputFile = new TFile(outputFileName, "RECREATE");
-  else            outputFile = new TFile("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test/default.root", "RECREATE");
+  else            outputFile = new TFile("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/default.root", "RECREATE");
 
 // INPUT TREES
   vector<TString> inputName;
