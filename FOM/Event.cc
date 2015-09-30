@@ -83,8 +83,27 @@ Event::PassesPreselection()
 // ### put the conditions on number of selected leptons below!!! ###
   if (indexFake.size() != N_LEPTONS)  return passed;
   else {
-    if (fLeptons.at(indexFake.at(0))->IsTight() || fLeptons.at(indexFake.at(1))->IsTight())
-      passed = true;
+    const unsigned int ind1 = indexFake.at(0);
+    const unsigned int ind2 = indexFake.at(1);
+    if (fLeptons.at(ind1)->IsTight() || fLeptons.at(ind2)->IsTight()) {
+      unsigned int nVeto = 0;
+      vector<unsigned int> indexVeto;
+      for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
+        if ((*lIt)->IsVeto()) {
+          unsigned int index = distance(fLeptons.begin(), lIt);
+          if (index != ind1 && index != ind2) {
+            nVeto++;
+            indexVeto.push_back(index);
+          }
+        }
+      }
+      if (nVeto != indexVeto.size()) {
+        cout << "Error: Number of Veto leptons DIFFERS from number of Veto lepton indices !!!" << endl;
+        cout << nVeto << " != " << indexVeto.size() << endl;
+        return passed;
+      } else if (!(indexVeto.empty()))  return passed;
+      else  passed = true;
+    }
   }
 
   if (passed) {
@@ -127,84 +146,6 @@ Event::PassesPreselection()
   return passed;
 }
 
-/*
-bool
-Event::PassesPreselection()
-{
-  if      (!(fSelectionLevel < Preselection))     return true;
-  else if (fSelectionLevel == FailsPreselection)  return false;
-
-  bool passed = false;
-  fSelectionLevel = FailsPreselection;
-
-  if((nEle + nMu) < N_LEPTONS)  return passed;
-
-  unsigned int nWLeptons = 0;
-  vector<unsigned int> indexWLeptons;
-  for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
-    if ((*lIt)->PassesPtCut() && (*lIt)->PassesEtaCut() && (*lIt)->IsTight()) {
-      nWLeptons++;
-      unsigned int index = distance(fLeptons.begin(), lIt);
-      indexWLeptons.push_back(index);
-    }
-  }
-
-  if (nWLeptons != indexWLeptons.size()) {
-    cout << "Error: Number of W Leptons DIFFERS from number of W Lepton indices !!!" << endl;
-    cout << nWLeptons << " != " << indexWLeptons.size() << endl;
-    return passed;
-  }
-
-  if (nWLeptons != 1)  return passed;
-  else  fCandidateLeptonIndex.first = indexWLeptons.at(0);
-
-  unsigned int nFakeLeptons = 0;
-  vector<unsigned int> indexFakeLeptons;
-  for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
-    if ((*lIt)->PassesPtCut() && (*lIt)->PassesEtaCut() && (*lIt)->IsFOMLoose()) {
-      unsigned int index = distance(fLeptons.begin(), lIt);
-      if ((int)index == fCandidateLeptonIndex.first)  continue;
-      else {
-        nFakeLeptons++;
-        indexFakeLeptons.push_back(index);
-      }
-    }
-  }
-
-  if (nFakeLeptons != indexFakeLeptons.size()) {
-    cout << "Error: Number of Fake Leptons DIFFERS from number of Fake Lepton indices !!!" << endl;
-    cout << nFakeLeptons << " != " << indexFakeLeptons.size() << endl;
-    return passed;
-  }
-
-  if (nFakeLeptons != 1)  return passed;
-  else  fCandidateLeptonIndex.second = indexFakeLeptons.at(0);
-
-// ### put the condition on number of selected leptons here!!! ###
-  if (indexWLeptons.size() + indexFakeLeptons.size() == N_LEPTONS &&
-      nWLeptons == nFakeLeptons &&
-      fCandidateLeptonIndex.first != fCandidateLeptonIndex.second &&
-      !(fCandidateLeptonIndex.first < 0) && !(fCandidateLeptonIndex.second < 0) &&
-      fCandidateLeptonIndex.first < (int)fLeptons.size() &&
-      fCandidateLeptonIndex.second < (int)fLeptons.size())
-    passed = true;
-
-  if (passed) {
-    fSelectionLevel = Preselection;
-    const unsigned int wFlavor = fLeptons.at(fCandidateLeptonIndex.first)->GetPdgId();
-    const unsigned int fakeFlavor = fLeptons.at(fCandidateLeptonIndex.second)->GetPdgId();
-    if (wFlavor == 11) {
-      if      (fakeFlavor == 11)  fFinalState = WEleFakeEle;
-      else if (fakeFlavor == 13)  fFinalState = WEleFakeMu;
-    } else if (wFlavor == 13) {
-      if      (fakeFlavor == 11)  fFinalState = WMuFakeEle;
-      else if (fakeFlavor == 13)  fFinalState = WMuFakeMu;
-    }
-  }
-
-  return passed;
-}
-*/
 
 bool
 Event::PassesSSSelection()

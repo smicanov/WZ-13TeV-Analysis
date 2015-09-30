@@ -107,6 +107,56 @@ Electron::Electron(unsigned int index, double pt, double eta, double phi, double
 
 
 bool
+Electron::IsVeto()
+{
+  bool veto = false;
+
+  if (fTree == 0) {
+    cout << "Tree pointer is ZERO!!!! \n";
+    return veto;
+  }
+
+  if (!(fTree->nEle))  return veto;
+
+  const double absEleSCEta = abs(fTree->eleSCEta->at(fIndex));
+  if (absEleSCEta <= ETASCBARREL) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_VETO &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_BARREL_VETO &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_BARREL_VETO &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_BARREL_VETO &&
+        fRelIso < RELISO_BARREL_VETO &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_BARREL_VETO &&
+        abs(fTree->eleD0->at(fIndex)) < D0_BARREL_VETO &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_VETO &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      veto = true;
+  } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
+    if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_VETO &&
+        abs(fTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_VETO &&
+        abs(fTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_ENDCAP_VETO &&
+        fTree->eleHoverE->at(fIndex) < HOVERE_ENDCAP_VETO &&
+        fRelIso < RELISO_ENDCAP_VETO &&
+        abs(fTree->eleEoverPInv->at(fIndex)) < OOEMOOP_ENDCAP_VETO &&
+        abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_VETO &&
+        abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_VETO &&
+        fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP_VETO &&
+        fTree->eleConvVeto->at(fIndex) == true)
+      veto = true;
+  }
+
+  bool vetoVID = false;
+  if (fTree->eleIDbit->at(fIndex)>>ELEVETO_BIT & 1)  vetoVID = true;
+  if (veto != vetoVID) {
+    cout << "Error: VID different from Cut Based for Ele VETO !!!" << endl;
+    cout << "VID : " << vetoVID << ", Cut Based : " << veto << endl;
+  }
+
+  return veto;
+}
+
+
+bool
 Electron::IsLoose()
 {
   bool loose = false;
@@ -300,6 +350,13 @@ Electron::IsFOMLoose()
 
 
 bool
+Electron::IsFOMTight()
+{
+  return IsMedium();
+}
+
+
+bool
 Electron::PassesPtCut()
 {
   bool passPt = false;
@@ -328,6 +385,24 @@ Muon::Muon(unsigned int index, double pt, double eta, double phi, double charge)
                                fTree->muPFNeuIso->at(index) - 0.5 * fTree->muPFPUIso->at(index), 0.0))
                               / fTree->muPt->at(index);
   fRelIso = relIsoDeltaB;
+}
+
+
+bool
+Muon::IsVeto()
+{
+  bool veto = false;
+
+  if (fTree == 0) {
+    cout << "Tree pointer is ZERO!!!! \n";
+    return veto;
+  }
+
+  if (!(fTree->nMu))  return veto;
+
+  if (fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1)  veto = true;
+
+  return veto;
 }
 
 
@@ -462,6 +537,13 @@ Muon::IsFOMLoose()
     fomLoose = true;
 
   return fomLoose;
+}
+
+
+bool
+Muon::IsFOMTight()
+{
+  return IsTight();
 }
 
 
