@@ -44,6 +44,7 @@ public:
   bool PassesSSSelection();
   bool PassesOFSelection();
   bool PassesFullSelection();
+  bool PassesTight();
 
   FinalState GetFinalState() { return fFinalState; }
   SelectionLevel GetSelectionLevel() { return fSelectionLevel; }
@@ -60,6 +61,7 @@ protected:
   SelectionLevel fSelectionLevel;
 
   vector<Lepton*> fLeptons;
+  vector<Jet*> fGoodJets;
   pair<int, int> fCandidateLeptonIndex;  // (W lepton, fake (FOMLoose) lepton)
 
 };

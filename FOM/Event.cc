@@ -24,8 +24,14 @@ Event::Clear()
 
 // Empty leptons
   for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ) {
-    delete *lIt;  
+    delete *lIt;
     lIt = fLeptons.erase(lIt);
+  }
+
+// Empty good jets
+  for (vector<Jet*>::iterator jIt = fGoodJets.begin(); jIt != fGoodJets.end(); ) {
+    delete *jIt;
+    jIt = fGoodJets.erase(jIt);
   }
 
   fCandidateLeptonIndex = make_pair(-1, -1);
@@ -49,6 +55,13 @@ Event::Read()
     Muon* mu = new Muon(indexMu, muPt->at(indexMu), muEta->at(indexMu),
                         muPhi->at(indexMu), muCharge->at(indexMu));
     fLeptons.push_back(mu);
+  }
+
+// Good Jets
+  for (unsigned int indexJet = 0; indexJet < jetPt->size(); indexJet++) {
+    Jet* jet = new Jet(indexJet, jetPt->at(indexJet), jetEta->at(indexJet),
+                       jetPhi->at(indexJet), jetEn->at(indexJet), jetPartonID->at(indexJet));
+    if (jet->PassesPtCut() && jet->PassesEtaCut() && jet->IsLoose())  fGoodJets.push_back(jet);
   }
 }
 
@@ -211,6 +224,23 @@ Event::PassesFullSelection()
     passed = true;
 
   if (passed)  fSelectionLevel = FullSelection;
+
+  return passed;
+}
+
+
+bool
+Event::PassesTight()
+{
+  bool passed = false;
+  if (!PassesPreselection())  return passed;
+  else if (fCandidateLeptonIndex.first != fCandidateLeptonIndex.second &&
+           !(fCandidateLeptonIndex.first < 0) && !(fCandidateLeptonIndex.second < 0) &&
+           fCandidateLeptonIndex.first < (int)fLeptons.size() &&
+           fCandidateLeptonIndex.second < (int)fLeptons.size() &&
+           fLeptons.at(fCandidateLeptonIndex.first)->IsTight() &&
+           fLeptons.at(fCandidateLeptonIndex.second)->IsFOMTight())
+    passed = true;
 
   return passed;
 }

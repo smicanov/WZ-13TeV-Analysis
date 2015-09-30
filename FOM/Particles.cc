@@ -30,10 +30,10 @@ Particle::Particle(unsigned int index, double pt, double eta, double phi, double
 }
 
 
-Jet::Jet(unsigned int index, double pt, double eta, double phi, double en)
+Jet::Jet(unsigned int index, double pt, double eta, double phi, double en, int partonId)
   : Particle(index, pt, eta, phi, en)
 {
-
+  fPartonId = partonId;
 }
 
 

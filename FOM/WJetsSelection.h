@@ -11,8 +11,8 @@ public:
 
   WJetsSelection(Event* event, TFile* outputFile);
 
-	unsigned int GetNAnalyzed() { return nAnalyzedEvents; }
-	unsigned int GetNSelected() { return nSelectedEvents; }
+  unsigned int GetNAnalyzed() { return nAnalyzedEvents; }
+  unsigned int GetNSelected() { return nSelectedEvents; }
 
   void Init();
   void Analysis();
@@ -61,6 +61,9 @@ protected:
   TH1D* hMt[6];
   TH1D* h2LMass[6];
 
+  TH1D* hGoodJets[6];
+  TH1D* hDRminJetWl[6];
+  TH1D* hDRminJetFakel[6];
 };
 
 #endif

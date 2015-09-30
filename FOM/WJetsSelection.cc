@@ -40,13 +40,13 @@ void WJetsSelection::Init()
     hFakePhi[i] = bookTH1D(("hFakePhi_" + boost::lexical_cast<string>(i)).c_str(),
                            "Fake lepton #phi", 72, -3.1416, 3.1416);
     hFakeRelIso[i] = bookTH1D(("hFakeRelIso_" + boost::lexical_cast<string>(i)).c_str(),
-                              "Fake lepton relIso", 100, 0, 3);
+                              "Fake lepton relIso", 100, 0, 0.2);
 
 
     hDeltaPhiWFake[i] = bookTH1D(("hDeltaPhiWFake_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (W, Fake)|", 72, 0, 3.1416);
+                                 "|#Delta#Phi (W l, Fake l)|", 72, 0, 3.1416);
     hDeltaRWFake[i] = bookTH1D(("hDeltaRWFake_" + boost::lexical_cast<string>(i)).c_str(),
-                               "#DeltaR (W, Fake)", 100, 0, 5);
+                               "#DeltaR (W l, Fake l)", 100, 0, 5);
 
     hMET[i] = bookTH1D(("hMET_" + boost::lexical_cast<string>(i)).c_str(),
                        "Missing E_{t}", 100, 0, 200);
@@ -54,19 +54,26 @@ void WJetsSelection::Init()
                           "Missing E_{t} #phi", 100, -3.1416, 3.1416);
 
     hDeltaPhiWMET[i] = bookTH1D(("hDeltaPhiWMET_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (W, miss E_{t})|", 72, 0, 3.1416);
+                                 "|#Delta#Phi (W l, miss E_{t})|", 72, 0, 3.1416);
     hDeltaRWMET[i] = bookTH1D(("hDeltaRWMET_" + boost::lexical_cast<string>(i)).c_str(),
-                               "#DeltaR (W, miss E_{t})", 100, 0, 5);
+                               "#DeltaR (W l, miss E_{t})", 100, 0, 5);
 
     hDeltaPhiFakeMET[i] = bookTH1D(("hDeltaPhiFakeMET_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "|#Delta#Phi (Fake, miss E_{t})|", 72, 0, 3.1416);
+                                 "|#Delta#Phi (Fake l, miss E_{t})|", 72, 0, 3.1416);
     hDeltaRFakeMET[i] = bookTH1D(("hDeltaRFakeMET_" + boost::lexical_cast<string>(i)).c_str(),
-                               "#DeltaR (Fake, miss E_{t})", 100, 0, 5);
+                               "#DeltaR (Fake l, miss E_{t})", 100, 0, 5);
 
     hMt[i] = bookTH1D(("hMt_" + boost::lexical_cast<string>(i)).c_str(),
                        "M_{t}", 100, 0, 200);
     h2LMass[i] = bookTH1D(("h2LMass_" + boost::lexical_cast<string>(i)).c_str(),
                           "mass(2l)", 100, 0, 200);
+
+    hGoodJets[i] = bookTH1D(("hGoodJets_" + boost::lexical_cast<string>(i)).c_str(),
+                            "Number of Jets", 11, -0.5, 10.5);
+    hDRminJetWl[i] = bookTH1D(("hDRminJetWl_" + boost::lexical_cast<string>(i)).c_str(),
+                              "#DeltaR_{min} (W l, jet)", 120, 0., 6.);
+    hDRminJetFakel[i] = bookTH1D(("hDRminJetFakel_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "#DeltaR_{min} (Fake l, jet)", 120, 0., 6.);
   }
 
   for (int i = 0; i < 6; i++) {
@@ -113,7 +120,7 @@ void WJetsSelection::Analysis()
 //    fEvent->DumpEvent(eventLists4[fEvent->GetFinalState()-1], 1);
   }
 
-  if (fEvent->PassesOFSelection()) {
+  if (fEvent->PassesSSSelection() && fEvent->PassesTight()) {
     yieldsByChannelOFSelection[fEvent->GetFinalState()]++;
     yieldsByChannelOFSelection[5]++;
 //    fEvent->DumpEvent(eventLists3[fEvent->GetFinalState()-1], 1);
@@ -131,8 +138,8 @@ void WJetsSelection::Analysis()
 //    fEvent->DumpEvent(eventLists1[fEvent->GetFinalState()-1], 1);
   }
 
-  if (!(fEvent->PassesPreselection()))  return;
-//  if (!(fEvent->PassesSSSelection()))  return;
+//  if (!(fEvent->PassesPreselection()))  return;
+  if (!(fEvent->PassesSSSelection()))  return;
 //  if (!(fEvent->PassesFullSelection()))  return;
 
   nSelectedEvents++;
@@ -167,6 +174,26 @@ void WJetsSelection::Analysis()
   const double mt = sqrt(2 * met * wPt * (1 - cos(wLepton->DeltaPhi(lMET))));
   const double mass2L = (*wLepton + *fakeLepton).M();
 
+  const unsigned int numberGoodJets = fEvent->fGoodJets.size();
+
+  if (!(fEvent->fGoodJets.empty())) {
+    vector<double> dRJetWl;
+    vector<double> dRJetFakel;
+    for (vector<Jet*>::const_iterator jIt = fEvent->fGoodJets.begin();
+         jIt != fEvent->fGoodJets.end(); ++jIt) {
+      const double dRjWl = (*jIt)->DeltaR(*wLepton);
+      dRJetWl.push_back(dRjWl);
+      const double dRjFakel = (*jIt)->DeltaR(*fakeLepton);
+      dRJetFakel.push_back(dRjFakel);
+    }
+    hDRminJetWl[5]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
+    hDRminJetWl[fEvent->GetFinalState()]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
+    hDRminJetFakel[5]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+    hDRminJetFakel[fEvent->GetFinalState()]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+    dRJetWl.clear();
+    dRJetFakel.clear();
+  }
+
   hWPt[5]->Fill(wPt);
   hWEta[5]->Fill(wEta);
   hWPhi[5]->Fill(wPhi);
@@ -191,6 +218,8 @@ void WJetsSelection::Analysis()
 
   hMt[5]->Fill(mt);
   h2LMass[5]->Fill(mass2L);
+
+  hGoodJets[5]->Fill(numberGoodJets);
 
 
   hWPt[fEvent->GetFinalState()]->Fill(wPt);
@@ -217,6 +246,8 @@ void WJetsSelection::Analysis()
 
   hMt[fEvent->GetFinalState()]->Fill(mt);
   h2LMass[fEvent->GetFinalState()]->Fill(mass2L);
+
+  hGoodJets[fEvent->GetFinalState()]->Fill(numberGoodJets);
 }
 
 
@@ -227,7 +258,7 @@ void WJetsSelection::Finish()
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
        << "Selected events : " << GetNSelected() << "\n\n";
 
-  cout << "CHANNEL\tPreselection\tSS Selection\tOF Selection\tFull Selection" << "\n";
+  cout << "CHANNEL\tPreselection\tSS Selection\tTight Selection\tFull Selection" << "\n";
   for (int i = 0; i < 6; i++) {
     cout << i << "\t" << yieldsByChannelPreselection[i]
               << "\t" << yieldsByChannelSSSelection[i]

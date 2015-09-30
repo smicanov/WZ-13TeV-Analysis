@@ -38,10 +38,15 @@ class Jet : public Particle
 
 public:
 
-  Jet(unsigned int index, double pt, double eta, double phi, double en);
+  Jet(unsigned int index, double pt, double eta, double phi, double en, int partonId);
   bool IsLoose();
   bool PassesPtCut();
   bool PassesEtaCut();
+
+
+protected:
+
+  int fPartonId;
 
 };
 
