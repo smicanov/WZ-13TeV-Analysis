@@ -59,7 +59,7 @@ bool
 Jet::PassesEtaCut()
 {
   bool passEta = false;
-  if (abs(Eta()) > JET_ETACUT)  passEta = true;
+  if (abs(Eta()) < JET_ETACUT)  passEta = true;
   return passEta;
 }
 
