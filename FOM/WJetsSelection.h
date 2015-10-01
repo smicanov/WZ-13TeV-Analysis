@@ -62,6 +62,10 @@ protected:
   TH1D* h2LMass[6];
 
   TH1D* hGoodJets[6];
+  TH1D* hDRminGoodJetWl[6];
+  TH1D* hDRminGoodJetFakel[6];
+
+  TH1D* hJets[6];
   TH1D* hDRminJetWl[6];
   TH1D* hDRminJetFakel[6];
 };

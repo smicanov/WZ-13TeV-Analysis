@@ -29,11 +29,12 @@ Event::Clear()
   }
 
 // Empty good jets
-  for (vector<Jet*>::iterator jIt = fGoodJets.begin(); jIt != fGoodJets.end(); ) {
+  for (vector<Jet*>::iterator jIt = fJets.begin(); jIt != fJets.end(); ) {
     delete *jIt;
-    jIt = fGoodJets.erase(jIt);
+    jIt = fJets.erase(jIt);
   }
 
+  fGoodJetsIndex.clear();
   fCandidateLeptonIndex = make_pair(-1, -1);
 }
 
@@ -61,7 +62,9 @@ Event::Read()
   for (unsigned int indexJet = 0; indexJet < jetPt->size(); indexJet++) {
     Jet* jet = new Jet(indexJet, jetPt->at(indexJet), jetEta->at(indexJet),
                        jetPhi->at(indexJet), jetEn->at(indexJet), jetPartonID->at(indexJet));
-    if (jet->PassesPtCut() && jet->PassesEtaCut() && jet->IsLoose())  fGoodJets.push_back(jet);
+    fJets.push_back(jet);
+    if (jet->PassesPtCut() && jet->PassesEtaCut() && jet->IsLoose())
+      fGoodJetsIndex.push_back(jet->GetIndex());
   }
 }
 

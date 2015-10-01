@@ -61,7 +61,8 @@ protected:
   SelectionLevel fSelectionLevel;
 
   vector<Lepton*> fLeptons;
-  vector<Jet*> fGoodJets;
+  vector<Jet*> fJets;
+  vector<unsigned int> fGoodJetsIndex;
   pair<int, int> fCandidateLeptonIndex;  // (W lepton, fake (FOMLoose) lepton)
 
 };

@@ -136,6 +136,6 @@
 
 // ### Jets ###
 
-#define JET_PTCUT  30.
+#define JET_PTCUT  0.
 #define JET_ETACUT  2.5
 
