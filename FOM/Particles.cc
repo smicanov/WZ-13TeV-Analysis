@@ -328,8 +328,8 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_BARREL_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_BARREL_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
-        fTree->eleConvVeto->at(fIndex) == true &&
-        fRelIso < RELISO_BARREL_LOOSE)
+        fTree->eleConvVeto->at(fIndex) == true/* &&
+        fRelIso < RELISO_BARREL_LOOSE*/)
       fomLoose = true;
   } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
     if (fTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_MEDIUM &&
@@ -340,8 +340,8 @@ Electron::IsFOMLoose()
         abs(fTree->eleD0->at(fIndex)) < D0_ENDCAP_MEDIUM &&
         abs(fTree->eleDz->at(fIndex)) < DZ_ENDCAP_MEDIUM &&
         fTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
-        fTree->eleConvVeto->at(fIndex) == true &&
-        fRelIso < RELISO_ENDCAP_LOOSE)
+        fTree->eleConvVeto->at(fIndex) == true/* &&
+        fRelIso < RELISO_ENDCAP_LOOSE*/)
       fomLoose = true;
   }
 
@@ -532,8 +532,8 @@ Muon::IsFOMLoose()
       fTree->muPixelHits->at(fIndex) > 0 &&
       fTree->muTrkLayers->at(fIndex) > 5 &&
       fTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
-      fTree->muType->at(fIndex)>>PFMUON_BIT & 1 &&
-      fRelIso < MU_RELISO_LOOSE)
+      fTree->muType->at(fIndex)>>PFMUON_BIT & 1/* &&
+      fRelIso < MU_RELISO_LOOSE*/)
     fomLoose = true;
 
   return fomLoose;

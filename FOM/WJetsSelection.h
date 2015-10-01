@@ -58,16 +58,34 @@ protected:
   TH1D* hDeltaRFakeMET[6];
   TH1D* hDeltaPhiFakeMET[6];
 
-  TH1D* hMt[6];
+  TH1D* hWMt[6];
+  TH1D* hFakeMt[6];
+
+  TH1D* hDeltaPhiWBosonWl[6];
+  TH1D* hDeltaRWBosonWl[6];
+  TH1D* hDeltaPhiWBosonFakel[6];
+  TH1D* hDeltaRWBosonFakel[6];
+
+  TH1D* hDeltaPhiFakeBosonWl[6];
+  TH1D* hDeltaRFakeBosonWl[6];
+  TH1D* hDeltaPhiFakeBosonFakel[6];
+  TH1D* hDeltaRFakeBosonFakel[6];
+
   TH1D* h2LMass[6];
 
-  TH1D* hGoodJets[6];
-  TH1D* hDRminGoodJetWl[6];
-  TH1D* hDRminGoodJetFakel[6];
+  TH1D* hGoodJets15[6];
+  TH1D* hDRminGoodJet15Wl[6];
+  TH1D* hDRminGoodJet15Fakel[6];
 
-  TH1D* hJets[6];
-  TH1D* hDRminJetWl[6];
-  TH1D* hDRminJetFakel[6];
+  TH1D* hGoodJetsLead20[6];
+  TH1D* hDRminGoodJetWlLead20[6];
+  TH1D* hDRminGoodJetFakelLead20[6];
+
+  TH1D* hLeadJetPt[6];
+  TH1D* hLeadJetEta[6];
+  TH1D* hLeadJetPhi[6];
+  TH1D* hLeadJetEt[6];
+
 };
 
 #endif

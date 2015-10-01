@@ -119,9 +119,16 @@ public:
 
 
 inline
-bool HigherPt(const Particle* p1, const Particle* p2)
+bool HigherPt(const Particle* particle1, const Particle* particle2)
 {
-  return p1->Pt() > p2->Pt();
+  return particle1->Pt() > particle2->Pt();
+}
+
+
+inline
+bool HigherPtJets(const Jet j1, const Jet j2)
+{
+  return j1.Pt() > j2.Pt();
 }
 
 

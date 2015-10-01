@@ -63,24 +63,55 @@ void WJetsSelection::Init()
     hDeltaRFakeMET[i] = bookTH1D(("hDeltaRFakeMET_" + boost::lexical_cast<string>(i)).c_str(),
                                "#DeltaR (Fake l, miss E_{t})", 100, 0, 5);
 
-    hMt[i] = bookTH1D(("hMt_" + boost::lexical_cast<string>(i)).c_str(),
-                       "M_{t}", 100, 0, 200);
+    hWMt[i] = bookTH1D(("hWMt_" + boost::lexical_cast<string>(i)).c_str(),
+                       "W M_{t}", 100, 0, 200);
+    hFakeMt[i] = bookTH1D(("hFakeMt_" + boost::lexical_cast<string>(i)).c_str(),
+                       "Fake M_{t}", 100, 0, 200);
+
+    hDeltaPhiWBosonWl[i] = bookTH1D(("hDeltaPhiWBosonWl_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "|#Delta#Phi (W boson, W lepton)|", 72, 0, 3.1416);
+    hDeltaRWBosonWl[i] = bookTH1D(("hDeltaRWBosonWl_" + boost::lexical_cast<string>(i)).c_str(),
+                               "#DeltaR (W boson, W lepton)", 100, 0, 5);
+    hDeltaPhiWBosonFakel[i] = bookTH1D(("hDeltaPhiWBosonFakel_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "|#Delta#Phi (W boson, Fake lepton)|", 72, 0, 3.1416);
+    hDeltaRWBosonFakel[i] = bookTH1D(("hDeltaRWBosonFakel_" + boost::lexical_cast<string>(i)).c_str(),
+                               "#DeltaR (W boson, Fake lepton)", 100, 0, 5);
+
+    hDeltaPhiFakeBosonWl[i] = bookTH1D(("hDeltaPhiFakeBosonWl_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "|#Delta#Phi (Fake W boson, W lepton)|", 72, 0, 3.1416);
+    hDeltaRFakeBosonWl[i] = bookTH1D(("hDeltaRFakeBosonWl_" + boost::lexical_cast<string>(i)).c_str(),
+                               "#DeltaR (Fake W boson, W lepton)", 100, 0, 5);
+    hDeltaPhiFakeBosonFakel[i] = bookTH1D(("hDeltaPhiFakeBosonFakel_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "|#Delta#Phi (Fake W boson, Fake lepton)|", 72, 0, 3.1416);
+    hDeltaRFakeBosonFakel[i] = bookTH1D(("hDeltaRFakeBosonFakel_" + boost::lexical_cast<string>(i)).c_str(),
+                               "#DeltaR (Fake W boson, Fake lepton)", 100, 0, 5);
+
     h2LMass[i] = bookTH1D(("h2LMass_" + boost::lexical_cast<string>(i)).c_str(),
                           "mass(2l)", 100, 0, 200);
 
-    hGoodJets[i] = bookTH1D(("hGoodJets_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of good Jets", 6, -0.5, 5.5);
-    hDRminGoodJetWl[i] = bookTH1D(("hDRminJetWl_" + boost::lexical_cast<string>(i)).c_str(),
-                              "#DeltaR_{min} (W l, good jet)", 70, 0, 7);
-    hDRminGoodJetFakel[i] = bookTH1D(("hDRminJetFakel_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "#DeltaR_{min} (Fake l, good jet)", 70, 0, 7);
+    hGoodJets15[i] = bookTH1D(("hGoodJets15_" + boost::lexical_cast<string>(i)).c_str(),
+                            "Number of good Jets (p_{t}^{Good} > 15 GeV)", 11, -0.5, 10.5);
+    hDRminGoodJet15Wl[i] = bookTH1D(("hDRminGoodJet15Wl_" + boost::lexical_cast<string>(i)).c_str(),
+                              "#DeltaR_{min} (W l, good jet (15 GeV))", 70, 0, 7);
+    hDRminGoodJet15Fakel[i] = bookTH1D(("hDRminGoodJet15Fakel_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "#DeltaR_{min} (Fake l, good jet (15 GeV))", 70, 0, 7);
 
-    hJets[i] = bookTH1D(("hGoodJets_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of Jets", 11, -0.5, 10.5);
-    hDRminJetWl[i] = bookTH1D(("hDRminJetWl_" + boost::lexical_cast<string>(i)).c_str(),
-                              "#DeltaR_{min} (W l, jet)", 100, 0, 10);
-    hDRminJetFakel[i] = bookTH1D(("hDRminJetFakel_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "#DeltaR_{min} (Fake l, jet)", 100, 0, 10);
+    hGoodJetsLead20[i] = bookTH1D(("hGoodJetsLead20_" + boost::lexical_cast<string>(i)).c_str(),
+                            "Number of good Jets (p_{t}^{Lead} > 20 GeV)", 11, -0.5, 10.5);
+    hDRminGoodJetWlLead20[i] = bookTH1D(("hDRminGoodJetWlLead20_" + boost::lexical_cast<string>(i)).c_str(),
+                              "#DeltaR_{min} (W l, good jet (20 GeV))", 70, 0, 7);
+    hDRminGoodJetFakelLead20[i] = bookTH1D(("hDRminGoodJetFakelLead20_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "#DeltaR_{min} (Fake l, good jet (20 Gev))", 70, 0, 7);
+
+    hLeadJetPt[i] = bookTH1D(("hLeadJetPt_" + boost::lexical_cast<string>(i)).c_str(),
+                          "Lead jet p_{t}", 100, 0, 200);
+    hLeadJetEta[i] = bookTH1D(("hLeadJetEta_" + boost::lexical_cast<string>(i)).c_str(),
+                           "Lead jet #eta", 50, -2.5, 2.5);
+    hLeadJetPhi[i] = bookTH1D(("hLeadJetPhi_" + boost::lexical_cast<string>(i)).c_str(),
+                           "Lead jet #phi", 72, -3.1416, 3.1416);
+    hLeadJetEt[i] = bookTH1D(("hLeadJetEt_" + boost::lexical_cast<string>(i)).c_str(),
+                          "Lead jet E_{t}", 100, 0, 200);
+
   }
 
   for (int i = 0; i < 6; i++) {
@@ -170,7 +201,7 @@ void WJetsSelection::Analysis()
   const double phiMET= fEvent->pfMETPhi;
   const double pxMET = met * cos(phiMET);
   const double pyMET = met * sin(phiMET);
-  TLorentzVector lMET(pxMET, pyMET, 0., met);
+  const TLorentzVector lMET(pxMET, pyMET, 0., met);
 
   const double deltaPhiWMET = abs(wLepton->DeltaPhi(lMET));
   const double deltaRWMET = wLepton->DeltaR(lMET);
@@ -178,42 +209,94 @@ void WJetsSelection::Analysis()
   const double deltaPhiFakeMET = abs(lMET.DeltaPhi(*fakeLepton));
   const double deltaRFakeMET = lMET.DeltaR(*fakeLepton);
 
-  const double mt = sqrt(2 * met * wPt * (1 - cos(wLepton->DeltaPhi(lMET))));
+  const double wMt = sqrt(2 * met * wPt * (1 - cos(wLepton->DeltaPhi(lMET))));
+  const double fakeMt = sqrt(2 * met * fakePt * (1 - cos(fakeLepton->DeltaPhi(lMET))));
+
+  const TLorentzVector wBoson = lMET + *(wLepton);
+  const double deltaPhiWBosonWl = abs(wLepton->DeltaPhi(wBoson));
+  const double deltaRWBosonWl = wLepton->DeltaR(wBoson);
+  const double deltaPhiWBosonFakel = abs(fakeLepton->DeltaPhi(wBoson));
+  const double deltaRWBosonFakel = fakeLepton->DeltaR(wBoson);
+
+  const TLorentzVector fakeBoson = lMET + *(fakeLepton);
+  const double deltaPhiFakeBosonWl = abs(fakeBoson.DeltaPhi(*wLepton));
+  const double deltaRFakeBosonWl = fakeBoson.DeltaR(*wLepton);
+  const double deltaPhiFakeBosonFakel = abs(fakeBoson.DeltaPhi(*fakeLepton));
+  const double deltaRFakeBosonFakel = fakeBoson.DeltaR(*fakeLepton);
+
   const double mass2L = (*wLepton + *fakeLepton).M();
 
-  hGoodJets[5]->Fill(fEvent->fGoodJetsIndex.size());
-  hGoodJets[fEvent->GetFinalState()]->Fill(fEvent->fGoodJetsIndex.size());
-  if (!(fEvent->fGoodJetsIndex.empty())) {
-    vector<double> dRGoodJetWl;
-    vector<double> dRGoodJetFakel;
-    for (vector<unsigned int>::const_iterator jIt = fEvent->fGoodJetsIndex.begin();
-         jIt != fEvent->fGoodJetsIndex.end(); ++jIt) {
+  unsigned int nGoodJets = 0;
+  vector<double> dRGoodJetWl;
+  vector<double> dRGoodJetFakel;
+  for (vector<unsigned int>::const_iterator jIt = fEvent->fGoodJetsIndex.begin();
+       jIt != fEvent->fGoodJetsIndex.end(); ++jIt) {
+    if (fEvent->fJets.at(*jIt)->Pt() > GOODJET_PTCUT) {
+      nGoodJets++;
       const double dRjWl = fEvent->fJets.at(*jIt)->DeltaR(*wLepton);
       dRGoodJetWl.push_back(dRjWl);
       const double dRjFakel = fEvent->fJets.at(*jIt)->DeltaR(*fakeLepton);
       dRGoodJetFakel.push_back(dRjFakel);
     }
-    hDRminGoodJetWl[5]->Fill(*(min_element(dRGoodJetWl.begin(), dRGoodJetWl.end())));
-    hDRminGoodJetWl[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetWl.begin(), dRGoodJetWl.end())));
-    hDRminGoodJetFakel[5]->Fill(*(min_element(dRGoodJetFakel.begin(), dRGoodJetFakel.end())));
-    hDRminGoodJetFakel[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetFakel.begin(), dRGoodJetFakel.end())));
   }
 
-  hJets[5]->Fill(fEvent->fJets.size());
-  hJets[fEvent->GetFinalState()]->Fill(fEvent->fJets.size());
-  if (!(fEvent->fJets.empty())) {
-    vector<double> dRJetWl;
-    vector<double> dRJetFakel;
-    for (vector<Jet*>::const_iterator jIt = fEvent->fJets.begin(); jIt != fEvent->fJets.end(); ++jIt) {
-      const double dRjWl = (*jIt)->DeltaR(*wLepton);
-      dRJetWl.push_back(dRjWl);
-      const double dRjFakel = (*jIt)->DeltaR(*fakeLepton);
-      dRJetFakel.push_back(dRjFakel);
+  hGoodJets15[5]->Fill(nGoodJets);
+  hGoodJets15[fEvent->GetFinalState()]->Fill(nGoodJets);
+
+  if (!(dRGoodJetWl.empty())) {
+    hDRminGoodJet15Wl[5]->Fill(*(min_element(dRGoodJetWl.begin(), dRGoodJetWl.end())));
+    hDRminGoodJet15Wl[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetWl.begin(), dRGoodJetWl.end())));
+    hDRminGoodJet15Fakel[5]->Fill(*(min_element(dRGoodJetFakel.begin(), dRGoodJetFakel.end())));
+    hDRminGoodJet15Fakel[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetFakel.begin(), dRGoodJetFakel.end())));
+  }
+
+  if (!(fEvent->fGoodJetsIndex.empty())) {
+    vector<Jet> jets;
+    for (vector<unsigned int>::const_iterator jIt = fEvent->fGoodJetsIndex.begin();
+         jIt != fEvent->fGoodJetsIndex.end(); ++jIt) {
+      const Jet goodJet = *(fEvent->fJets.at(*jIt));
+      jets.push_back(goodJet);
     }
-    hDRminJetWl[5]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
-    hDRminJetWl[fEvent->GetFinalState()]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
-    hDRminJetFakel[5]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
-    hDRminJetFakel[fEvent->GetFinalState()]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+    sort(jets.begin(), jets.end(), HigherPtJets);
+
+    const double leadJetPt = jets.front().Pt();
+    const double leadJetEta = jets.front().Eta();
+    const double leadJetPhi = jets.front().Phi();
+    const double leadJetEt = jets.front().Et();
+
+    hLeadJetPt[5]->Fill(leadJetPt);
+    hLeadJetPt[fEvent->GetFinalState()]->Fill(leadJetPt);
+    hLeadJetEta[5]->Fill(leadJetEta);
+    hLeadJetEta[fEvent->GetFinalState()]->Fill(leadJetEta);
+    hLeadJetPhi[5]->Fill(leadJetPhi);
+    hLeadJetPhi[fEvent->GetFinalState()]->Fill(leadJetPhi);
+    hLeadJetEt[5]->Fill(leadJetEt);
+    hLeadJetEt[fEvent->GetFinalState()]->Fill(leadJetEt);
+
+    if (leadJetPt > LEADJET_PTCUT) {
+      hGoodJetsLead20[5]->Fill(fEvent->fGoodJetsIndex.size());
+      hGoodJetsLead20[fEvent->GetFinalState()]->Fill(fEvent->fGoodJetsIndex.size());
+
+      vector<double> dRJetWl;
+      vector<double> dRJetFakel;
+      for (vector<Jet*>::const_iterator jIt = fEvent->fJets.begin(); jIt != fEvent->fJets.end(); ++jIt) {
+        const double dRjWl = (*jIt)->DeltaR(*wLepton);
+        dRJetWl.push_back(dRjWl);
+        const double dRjFakel = (*jIt)->DeltaR(*fakeLepton);
+        dRJetFakel.push_back(dRjFakel);
+      }
+
+      hDRminGoodJetWlLead20[5]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
+      hDRminGoodJetWlLead20[fEvent->GetFinalState()]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
+      hDRminGoodJetFakelLead20[5]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+      hDRminGoodJetFakelLead20[fEvent->GetFinalState()]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+    } else {
+      hGoodJetsLead20[5]->Fill(0.);
+      hGoodJetsLead20[fEvent->GetFinalState()]->Fill(0.);
+    }
+  } else {
+    hGoodJetsLead20[5]->Fill(0.);
+    hGoodJetsLead20[fEvent->GetFinalState()]->Fill(0.);
   }
 
   hWPt[5]->Fill(wPt);
@@ -238,7 +321,19 @@ void WJetsSelection::Analysis()
   hDeltaPhiFakeMET[5]->Fill(deltaPhiFakeMET);
   hDeltaRFakeMET[5]->Fill(deltaRFakeMET);
 
-  hMt[5]->Fill(mt);
+  hWMt[5]->Fill(wMt);
+  hFakeMt[5]->Fill(fakeMt);
+
+  hDeltaPhiWBosonWl[5]->Fill(deltaPhiWBosonWl);
+  hDeltaRWBosonWl[5]->Fill(deltaRWBosonWl);
+  hDeltaPhiWBosonFakel[5]->Fill(deltaPhiWBosonFakel);
+  hDeltaRWBosonFakel[5]->Fill(deltaRWBosonFakel);
+
+  hDeltaPhiFakeBosonWl[5]->Fill(deltaPhiFakeBosonWl);
+  hDeltaRFakeBosonWl[5]->Fill(deltaRFakeBosonWl);
+  hDeltaPhiFakeBosonFakel[5]->Fill(deltaPhiFakeBosonFakel);
+  hDeltaRFakeBosonFakel[5]->Fill(deltaRFakeBosonFakel);
+
   h2LMass[5]->Fill(mass2L);
 
 
@@ -264,7 +359,19 @@ void WJetsSelection::Analysis()
   hDeltaPhiFakeMET[fEvent->GetFinalState()]->Fill(deltaPhiFakeMET);
   hDeltaRFakeMET[fEvent->GetFinalState()]->Fill(deltaRFakeMET);
 
-  hMt[fEvent->GetFinalState()]->Fill(mt);
+  hWMt[fEvent->GetFinalState()]->Fill(wMt);
+  hFakeMt[fEvent->GetFinalState()]->Fill(fakeMt);
+
+  hDeltaPhiWBosonWl[fEvent->GetFinalState()]->Fill(deltaPhiWBosonWl);
+  hDeltaRWBosonWl[fEvent->GetFinalState()]->Fill(deltaRWBosonWl);
+  hDeltaPhiWBosonFakel[fEvent->GetFinalState()]->Fill(deltaPhiWBosonFakel);
+  hDeltaRWBosonFakel[fEvent->GetFinalState()]->Fill(deltaRWBosonFakel);
+
+  hDeltaPhiFakeBosonWl[fEvent->GetFinalState()]->Fill(deltaPhiFakeBosonWl);
+  hDeltaRFakeBosonWl[fEvent->GetFinalState()]->Fill(deltaRFakeBosonWl);
+  hDeltaPhiFakeBosonFakel[fEvent->GetFinalState()]->Fill(deltaPhiFakeBosonFakel);
+  hDeltaRFakeBosonFakel[fEvent->GetFinalState()]->Fill(deltaRFakeBosonFakel);
+
   h2LMass[fEvent->GetFinalState()]->Fill(mass2L);
 }
 
