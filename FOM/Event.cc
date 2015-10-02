@@ -99,8 +99,8 @@ Event::PassesPreselection()
 // ### put the conditions on number of selected leptons below!!! ###
   if (indexFake.size() != N_LEPTONS)  return passed;
   else {
-    const unsigned int ind1 = indexFake.at(0);
-    const unsigned int ind2 = indexFake.at(1);
+    const unsigned int ind1 = indexFake.front();
+    const unsigned int ind2 = indexFake.back();
     if (fLeptons.at(ind1)->IsTight() || fLeptons.at(ind2)->IsTight()) {
       unsigned int nVeto = 0;
       vector<unsigned int> indexVeto;
@@ -124,8 +124,8 @@ Event::PassesPreselection()
 
   if (passed) {
     fSelectionLevel = Preselection;
-    const unsigned int ind1 = indexFake.at(0);
-    const unsigned int ind2 = indexFake.at(1);
+    const unsigned int ind1 = indexFake.front();
+    const unsigned int ind2 = indexFake.back();
 
     if (fLeptons.at(ind1)->IsTight() && !(fLeptons.at(ind2)->IsTight())) {
       fCandidateLeptonIndex.first = ind1;
@@ -134,7 +134,12 @@ Event::PassesPreselection()
       fCandidateLeptonIndex.first = ind2;
       fCandidateLeptonIndex.second = ind1;
     } else {
-      if (fLeptons.at(ind2)->Pt() > fLeptons.at(ind1)->Pt()) {
+      const double pxMET = pfMET * cos(pfMETPhi);
+      const double pyMET = pfMET * sin(pfMETPhi);
+      const TLorentzVector lMET(pxMET, pyMET, 0., pfMET);
+      const double dR1 = fLeptons.at(ind1)->DeltaR(lMET);
+      const double dR2 = fLeptons.at(ind2)->DeltaR(lMET);
+      if (dR1 > dR2) {
         fCandidateLeptonIndex.first = ind2;
         fCandidateLeptonIndex.second = ind1;
       } else {
