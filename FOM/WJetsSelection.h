@@ -85,6 +85,10 @@ protected:
   TH1D* hDRminGoodJetWlLeadCut[6];
   TH1D* hDRminGoodJetFakelLeadCut[6];
 
+  TH1D* hGoodJetsCutLeadCut[6];
+  TH1D* hDRminGoodJetCutWlLeadCut[6];
+  TH1D* hDRminGoodJetCutFakelLeadCut[6];
+
   TH1D* hLeadJetPt[6];
   TH1D* hLeadJetEta[6];
   TH1D* hLeadJetPhi[6];

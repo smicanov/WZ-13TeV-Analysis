@@ -97,18 +97,25 @@ void WJetsSelection::Init()
                                  "#DeltaR_{min} (Fake l, good jet (p_{t}^{jet} > 10 GeV))", 100, 0, 1);
 
     hGoodJetsCut[i] = bookTH1D(("hGoodJetsCut_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of good Jets (p_{t}^{good jet} > 35 GeV)", 11, -0.5, 10.5);
+                            "Number of good Jets (p_{t}^{good jet} > 30 GeV)", 11, -0.5, 10.5);
     hDRminGoodJetCutWl[i] = bookTH1D(("hDRminGoodJetCutWl_" + boost::lexical_cast<string>(i)).c_str(),
-                              "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 35 GeV))", 80, 0, 4);
+                              "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 30 GeV))", 80, 0, 4);
     hDRminGoodJetCutFakel[i] = bookTH1D(("hDRminGoodJetCutFakel_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 35 GeV))", 80, 0, 4);
+                                 "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 30 GeV))", 80, 0, 4);
 
     hGoodJetsLeadCut[i] = bookTH1D(("hGoodJetsLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of good Jets (p_{t}^{lead jet} > 40 GeV)", 16, -0.5, 15.5);
+                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV)", 16, -0.5, 15.5);
     hDRminGoodJetWlLeadCut[i] = bookTH1D(("hDRminGoodJetWlLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
-                              "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 40 GeV))", 100, 0, 1);
+                              "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV))", 100, 0, 1);
     hDRminGoodJetFakelLeadCut[i] = bookTH1D(("hDRminGoodJetFakelLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
-                                 "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 40 Gev))", 100, 0, 1);
+                                 "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 Gev))", 100, 0, 1);
+
+    hGoodJetsCutLeadCut[i] = bookTH1D(("hGoodJetsCutLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
+                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)", 10, -1.5, 8.5);
+    hDRminGoodJetCutWlLeadCut[i] = bookTH1D(("hDRminGoodJetCutWlLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
+                              "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)", 100, 0, 2);
+    hDRminGoodJetCutFakelLeadCut[i] = bookTH1D(("hDRminGoodJetCutFakelLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
+                                 "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 Gev & p_{t}^{good jet} > 30 GeV)", 100, 0, 2);
 
     hLeadJetPt[i] = bookTH1D(("hLeadJetPt_" + boost::lexical_cast<string>(i)).c_str(),
                           "Lead jet p_{t}", 125, 0, 250);
@@ -321,13 +328,41 @@ void WJetsSelection::Analysis()
       hDRminGoodJetWlLeadCut[fEvent->GetFinalState()]->Fill(*(min_element(dRJetWl.begin(), dRJetWl.end())));
       hDRminGoodJetFakelLeadCut[5]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
       hDRminGoodJetFakelLeadCut[fEvent->GetFinalState()]->Fill(*(min_element(dRJetFakel.begin(), dRJetFakel.end())));
+
+      unsigned int nGoodJetsCutLeadCut = 0;
+      vector<double> dRGoodJetCutWlLeadCut;
+      vector<double> dRGoodJetCutFakelLeadCut;
+      for (vector<unsigned int>::const_iterator jIt = fEvent->fGoodJetsIndex.begin();
+           jIt != fEvent->fGoodJetsIndex.end(); ++jIt) {
+        if (fEvent->fJets.at(*jIt)->Pt() > GOODJET_PTCUT) {
+        nGoodJetsCutLeadCut++;
+        const double dRjWlLeadCut = fEvent->fJets.at(*jIt)->DeltaR(*wLepton);
+        dRGoodJetCutWlLeadCut.push_back(dRjWlLeadCut);
+        const double dRjFakelLeadCut = fEvent->fJets.at(*jIt)->DeltaR(*fakeLepton);
+        dRGoodJetCutFakelLeadCut.push_back(dRjFakelLeadCut);
+        }
+      }
+
+      hGoodJetsCutLeadCut[5]->Fill(nGoodJetsCutLeadCut);
+      hGoodJetsCutLeadCut[fEvent->GetFinalState()]->Fill(nGoodJetsCutLeadCut);
+
+      if (!(dRGoodJetCutWlLeadCut.empty())) {
+        hDRminGoodJetCutWlLeadCut[5]->Fill(*(min_element(dRGoodJetCutWlLeadCut.begin(), dRGoodJetCutWlLeadCut.end())));
+        hDRminGoodJetCutWlLeadCut[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetCutWlLeadCut.begin(), dRGoodJetCutWlLeadCut.end())));
+        hDRminGoodJetCutFakelLeadCut[5]->Fill(*(min_element(dRGoodJetCutFakelLeadCut.begin(), dRGoodJetCutFakelLeadCut.end())));
+        hDRminGoodJetCutFakelLeadCut[fEvent->GetFinalState()]->Fill(*(min_element(dRGoodJetCutFakelLeadCut.begin(), dRGoodJetCutFakelLeadCut.end())));
+      }
     } else {
-      hGoodJetsLeadCut[5]->Fill(0.);
-      hGoodJetsLeadCut[fEvent->GetFinalState()]->Fill(0.);
+      hGoodJetsLeadCut[5]->Fill(-1.);
+      hGoodJetsLeadCut[fEvent->GetFinalState()]->Fill(-1.);
+      hGoodJetsCutLeadCut[5]->Fill(-1.);
+      hGoodJetsCutLeadCut[fEvent->GetFinalState()]->Fill(-1.);
     }
   } else {
-    hGoodJetsLeadCut[5]->Fill(0.);
-    hGoodJetsLeadCut[fEvent->GetFinalState()]->Fill(0.);
+    hGoodJetsLeadCut[5]->Fill(-1.);
+    hGoodJetsLeadCut[fEvent->GetFinalState()]->Fill(-1.);
+    hGoodJetsCutLeadCut[5]->Fill(-1.);
+    hGoodJetsCutLeadCut[fEvent->GetFinalState()]->Fill(-1.);
   }
 
   hWPt[5]->Fill(wPt);
