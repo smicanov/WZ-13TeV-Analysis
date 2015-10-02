@@ -104,14 +104,14 @@ void WJetsSelection::Init()
                                  "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 30 GeV))", 80, 0, 4);
 
     hGoodJetsLeadCut[i] = bookTH1D(("hGoodJetsLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV)", 16, -0.5, 15.5);
+                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV)", 17, -1.5, 15.5);
     hDRminGoodJetWlLeadCut[i] = bookTH1D(("hDRminGoodJetWlLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
                               "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV))", 100, 0, 1);
     hDRminGoodJetFakelLeadCut[i] = bookTH1D(("hDRminGoodJetFakelLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
                                  "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 Gev))", 100, 0, 1);
 
     hGoodJetsCutLeadCut[i] = bookTH1D(("hGoodJetsCutLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
-                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)", 10, -1.5, 8.5);
+                            "Number of good Jets (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)", 12, -1.5, 10.5);
     hDRminGoodJetCutWlLeadCut[i] = bookTH1D(("hDRminGoodJetCutWlLeadCut_" + boost::lexical_cast<string>(i)).c_str(),
                               "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)", 100, 0, 2);
     hDRminGoodJetCutFakelLeadCut[i] = bookTH1D(("hDRminGoodJetCutFakelLeadCut_" + boost::lexical_cast<string>(i)).c_str(),

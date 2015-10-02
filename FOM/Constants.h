@@ -139,5 +139,5 @@
 #define JET_PTCUT  10.
 #define JET_ETACUT  2.5
 #define GOODJET_PTCUT  30.
-#define LEADJET_PTCUT  45.
+#define LEADJET_PTCUT  40.
 

@@ -580,14 +580,14 @@ main()
 {
   const MyStyle rootStyle(600);
 
-  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/WZ.root");
-  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/ZZ4L.root");
-  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/ZZ2L2Q.root");
-  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/WW.root");
-  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/DYM50.root");
-  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/TT.root");
-  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/DYM10to50.root");
-  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/WJets.root");
+  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WZ.root");
+  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/ZZ4L.root");
+  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/ZZ2L2Q.root");
+  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WW.root");
+  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/DYM50.root");
+  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/TT.root");
+  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/DYM10to50.root");
+  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WJets.root");
 
   unsigned int n = 6;
 
@@ -602,9 +602,10 @@ main()
       "GoodJets", "DRminGoodJetWl", "DRminGoodJetFakel",
       "GoodJetsCut", "DRminGoodJetCutWl", "DRminGoodJetCutFakel",
       "GoodJetsLeadCut", "DRminGoodJetWlLeadCut", "DRminGoodJetFakelLeadCut",
+      "GoodJetsCutLeadCut", "DRminGoodJetCutWlLeadCut", "DRminGoodJetCutFakelLeadCut",
       "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
 
-  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/plots/stack/";
+  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/plots/stack/";
   vector<string> xAxisHisto =
     { "W lepton p_{t} [GeV]", "W lepton #eta", "W lepton #Phi", "W lepton relIso",
       "Fake lepton p_{t} [GeV]", "Fake lepton #eta", "Fake lepton #Phi", "Fake lepton relIso",
@@ -617,17 +618,20 @@ main()
        "mass_{2l} [GeV]",
        "Number of good Jets (p_{t}^{jet} > 10 GeV)",
        "#DeltaR_{min} (W l, good jet (p_{t}^{jet} > 10 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{jet} > 10 GeV))",
-       "Number of good Jets (p_{t}^{good jet} > 35 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 35 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 35 GeV))",
-       "Number of good Jets (p_{t}^{lead jet} > 40 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 40 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 40 GeV))",
+       "Number of good Jets (p_{t}^{good jet} > 30 GeV)",
+       "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 30 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 30 GeV))",
+       "Number of good Jets (p_{t}^{lead jet} > 45 GeV)",
+       "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 GeV))",
+       "Number of good Jets (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)",
+       "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV))",
+       "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV))",
        "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
 
   vector<double> binWidthHisto = { 2.0, 0.1, 0.087267, 0.002, 1.0, 0.1, 0.087267, 0.05, 0.04363, 0.05,
                                    2.0, 0.087267, 0.04363, 0.05, 0.04363, 0.05, 2.0, 2.0,
                                    0.04363, 0.04, 0.04363, 0.05, 0.04363, 0.05, 0.04363, 0.04,
                                    2.0,
-                                   0., 0.01, 0.01 , 0., 0.05, 0.05 , 0., 0.01, 0.01,
+                                   0., 0.01, 0.01 , 0., 0.05, 0.05 , 0., 0.01, 0.01, 0., 0.02, 0.02,
                                    2.0, 0.1, 0.087267, 2.0 };
 
   for (unsigned int histo = 0; histo < histoName.size(); histo++) {
@@ -676,7 +680,7 @@ main()
   }
 */
 
-  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt35GeV_LeadJetPt40GeV/NoRelIso/SSSelection/plots/cuts/";
+  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/plots/cuts/";
   vector<string> graphName = { "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
   vector<string> xAxisGraph = { "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
   vector<double> startGraph = { 0., -2.5, -3.1416, 0. };
