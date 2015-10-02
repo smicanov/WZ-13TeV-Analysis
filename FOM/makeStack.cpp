@@ -580,38 +580,52 @@ main()
 {
   const MyStyle rootStyle(600);
 
-  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WZ.root");
-  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/ZZ4L.root");
-  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/ZZ2L2Q.root");
-  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WW.root");
-  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/DYM50.root");
-  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/TT.root");
-  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/DYM10to50.root");
-  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/WJets.root");
+  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/WZ.root");
+  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/ZZ4L.root");
+  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/ZZ2L2Q.root");
+  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/WW.root");
+  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/DYM50.root");
+  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/TT.root");
+  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/DYM10to50.root");
+  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/WJets.root");
 
   unsigned int n = 6;
 
   vector<string> histoName =
-    { "WPt", "WEta", "WPhi", "WRelIso",
-      "FakePt", "FakeEta", "FakePhi", "FakeRelIso",
-      "DeltaPhiWFake", "DeltaRWFake",
-      "MET", "METPhi",
-      "DeltaPhiWMET", "DeltaRWMET",
-      "DeltaPhiFakeMET", "DeltaRFakeMET",
-      "Mt", "2LMass" };
-//  vector<string> jetsName = { "NJets", "NJetsNoMuIso", "NJetsNoEleIso", "NJetsNoIso" };
-  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/plots/stack/";
+    { "WPt", "WEta", "WPhi", "WRelIso", "FakePt", "FakeEta", "FakePhi", "FakeRelIso",
+      "DeltaPhiWFake", "DeltaRWFake", "MET", "METPhi",
+      "DeltaPhiWMET", "DeltaRWMET", "DeltaPhiFakeMET", "DeltaRFakeMET",
+      "WMt", "FakeMt",
+      "DeltaPhiWBosonWl", "DeltaRWBosonWl", "DeltaPhiWBosonFakel", "DeltaRWBosonFakel",
+      "DeltaPhiFakeBosonWl", "DeltaRFakeBosonWl", "DeltaPhiFakeBosonFakel", "DeltaRFakeBosonFakel",
+      "2LMass",
+      "GoodJets", "DRminGoodJetWl", "DRminGoodJetFakel",
+      "GoodJetsCut", "DRminGoodJetCutWl", "DRminGoodJetCutFakel",
+      "GoodJetsLeadCut", "DRminGoodJetWlLeadCut", "DRminGoodJetFakelLeadCut",
+      "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
+
+  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/plots/stack/";
   vector<string> xAxisHisto =
     { "W lepton p_{t} [GeV]", "W lepton #eta", "W lepton #Phi", "W lepton relIso",
       "Fake lepton p_{t} [GeV]", "Fake lepton #eta", "Fake lepton #Phi", "Fake lepton relIso",
-      "|#Delta#Phi (Wl, Fakel)|", "#DeltaR (Wl, Fakel)",
+      "|#Delta#Phi (W l, Fake l)|", "#DeltaR (W l, Fake l)",
       "missing E_{t} [GeV]", "missing E_{t} #Phi" ,
-      "|#Delta#Phi (Wl, miss E_{t})|", "#DeltaR (Wl, miss E_{t})",
-      "|#Delta#Phi (Fakel, miss E_{t})|", "#DeltaR (Fakel, miss E_{t})",
-       "M_{t} [GeV]", "mass_{2l} [GeV]" };
-//  const string xAxisJets = "Number of Jets";
-  vector<double> binWidthHisto = { 2.0, 0.1, 0.087267, 0.002, 1.0, 0.1, 0.087267, 0.002, 0.04363, 0.05,
-                                   2.0, 0.087267, 0.04363, 0.05, 0.04363, 0.05, 2.0, 2.0 };
+      "|#Delta#Phi (W l, miss E_{t})|", "#DeltaR (W l, miss E_{t})", "|#Delta#Phi (Fake l, miss E_{t})|", "#DeltaR (Fake l, miss E_{t})",
+       "W M_{t} [GeV]", "Fake M_{t} [GeV]",
+       "|#Delta#Phi (W boson, W l)|", "#DeltaR (W boson, W l)", "|#Delta#Phi (W boson, Fake l)|", "#DeltaR (W boson, Fake l)",
+       "|#Delta#Phi (Fake boson, W l)|", "#DeltaR (Fake boson, W l)", "|#Delta#Phi (Fake boson, Fake l)|", "#DeltaR (Fake boson, Fake l)",
+        "mass_{2l} [GeV]",
+        "Number of good Jets (p_{t}^{jet} > 10GeV)", "#DeltaR_{min} (W l, good jet)", "#DeltaR_{min} (Fake l, good jet)",
+       "Number of good Jets (p_{t}^{good jet} > 10GeV)", "#DeltaR_{min} (W l, good jet)", "#DeltaR_{min} (Fake l, good jet)",
+       "Number of good Jets (p_{t}^{lead jet} > 10GeV)", "#DeltaR_{min} (W l, good jet)", "#DeltaR_{min} (Fake l, good jet)",
+       "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
+
+  vector<double> binWidthHisto = { 2.0, 0.1, 0.087267, 0.002, 1.0, 0.1, 0.087267, 0.05, 0.04363, 0.05,
+                                   2.0, 0.087267, 0.04363, 0.05, 0.04363, 0.05, 2.0, 2.0,
+                                   0.04363, 0.04, 0.04363, 0.05, 0.04363, 0.05, 0.04363, 0.04,
+                                   2.0,
+                                   0., 0.01, 0.01 , 0., 0.05, 0.05 , 0., 0.01, 0.01,
+                                   2.0, 0.1, 0.087267, 2.0 };
 
   for (unsigned int histo = 0; histo < histoName.size(); histo++) {
     TCanvas* canvas[n];
@@ -659,13 +673,12 @@ main()
   }
 */
 
-  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-RelIsoLoose/SSSelection/plots/cuts/";
-  vector<string> graphName = { "WPt", "FakePt", "DeltaRWFake", "MET", "Mt", "2LMass" };
-  vector<string> xAxisGraph = { "W lepton p_{t} [GeV]", "Fake lepton p_{t} [GeV]", "#DeltaR (Wl, Fakel)",
-                                "missing E_{t} [GeV]", "M_{t} [GeV]", "mass_{2l} [GeV]" };
-  vector<double> startGraph = { 0., 0., 0., 0., 0., 0. };
-  vector<double> endGraph = { 200., 100., 5., 200., 200., 200. };
-  vector<double> binWidthGraph = { 2., 1., 0.05, 2., 2., 2. };
+  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt10GeV_LeadJetPt10GeV/NoRelIso/SSSelection/plots/cuts/";
+  vector<string> graphName = { "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
+  vector<string> xAxisGraph = { "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
+  vector<double> startGraph = { 0., -2.5, -3.1416, 0. };
+  vector<double> endGraph = { 250., 2.5, 3.1416, 250. };
+  vector<double> binWidthGraph = { 2., 0.1, 0.087267, 2. };
   for (unsigned int graph = 0; graph < graphName.size(); graph++) {
     TCanvas* canvas[n];
     for (unsigned int i = 0; i < n; i++) {

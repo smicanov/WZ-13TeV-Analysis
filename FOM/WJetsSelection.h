@@ -73,13 +73,17 @@ protected:
 
   TH1D* h2LMass[6];
 
-  TH1D* hGoodJets15[6];
-  TH1D* hDRminGoodJet15Wl[6];
-  TH1D* hDRminGoodJet15Fakel[6];
+  TH1D* hGoodJets[6];
+  TH1D* hDRminGoodJetWl[6];
+  TH1D* hDRminGoodJetFakel[6];
 
-  TH1D* hGoodJetsLead20[6];
-  TH1D* hDRminGoodJetWlLead20[6];
-  TH1D* hDRminGoodJetFakelLead20[6];
+  TH1D* hGoodJetsCut[6];
+  TH1D* hDRminGoodJetCutWl[6];
+  TH1D* hDRminGoodJetCutFakel[6];
+
+  TH1D* hGoodJetsLeadCut[6];
+  TH1D* hDRminGoodJetWlLeadCut[6];
+  TH1D* hDRminGoodJetFakelLeadCut[6];
 
   TH1D* hLeadJetPt[6];
   TH1D* hLeadJetEta[6];

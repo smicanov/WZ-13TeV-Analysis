@@ -136,8 +136,8 @@
 
 // ### Jets ###
 
-#define JET_PTCUT  0.
+#define JET_PTCUT  10.
 #define JET_ETACUT  2.5
-#define GOODJET_PTCUT  15.
-#define LEADJET_PTCUT  20.
+#define GOODJET_PTCUT  35.
+#define LEADJET_PTCUT  40.
 
