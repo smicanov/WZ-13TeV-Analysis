@@ -125,40 +125,15 @@ void WJetsSelection::Init()
                            "Lead jet #phi", 72, -3.1416, 3.1416);
     hLeadJetEt[i] = bookTH1D(("hLeadJetEt_" + boost::lexical_cast<string>(i)).c_str(),
                           "Lead jet E_{t}", 125, 0, 250);
-
   }
 
   for (int i = 0; i < 6; i++) {
     yieldsByChannelPreselection[i] = 0;
     yieldsByChannelSSSelection[i] = 0;
-    yieldsByChannelOFSelection[i] = 0;
+    yieldsByChannelSSSelectionTight[i] = 0;
     yieldsByChannelFullSelection[i] = 0;
+    yieldsByChannelFullSelectionTight[i] = 0;
   }
-
-/*
-// Setup selected event lists 
-  for (int i = 1; i <= 4; i++) {
-    ostringstream outputFileName1;
-    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-NoRelIso/WJets_Preselection_" << i << ".txt";
-    cout << "File name : " << outputFileName1.str() << endl;
-    eventLists1[i-1].open(outputFileName1.str().c_str());
-
-    ostringstream outputFileName2;
-    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-NoRelIso/WJets_Preselection_" << i << ".txt";
-    cout << "File name : " << outputFileName2.str() << endl;
-    eventLists2[i-1].open(outputFileName2.str().c_str());
-
-    ostringstream outputFileName3;
-    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-NoRelIso/WJets_SSOFSelection_" << i << ".txt";
-    cout << "File name : " << outputFileName3.str() << endl;
-    eventLists3[i-1].open(outputFileName3.str().c_str());
-
-    ostringstream outputFileName4;
-    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/test_WEleTight_FOMLoose-NoRelIso/WJets_FullSelection_" << i << ".txt";
-    cout << "File name : " << outputFileName4.str() << endl;
-    eventLists4[i-1].open(outputFileName4.str().c_str());
-  }
-*/
 }
 
 
@@ -166,33 +141,34 @@ void WJetsSelection::Analysis()
 {
   nAnalyzedEvents++;
 
+  if (fEvent->PassesFullSelection() && fEvent->PassesTight()) {
+    yieldsByChannelFullSelectionTight[fEvent->GetFinalState()]++;
+    yieldsByChannelFullSelectionTight[5]++;
+  }
+
   if (fEvent->PassesFullSelection()) {
     yieldsByChannelFullSelection[fEvent->GetFinalState()]++;
     yieldsByChannelFullSelection[5]++;
-//    fEvent->DumpEvent(eventLists4[fEvent->GetFinalState()-1], 1);
   }
 
   if (fEvent->PassesSSSelection() && fEvent->PassesTight()) {
-    yieldsByChannelOFSelection[fEvent->GetFinalState()]++;
-    yieldsByChannelOFSelection[5]++;
-//    fEvent->DumpEvent(eventLists3[fEvent->GetFinalState()-1], 1);
+    yieldsByChannelSSSelectionTight[fEvent->GetFinalState()]++;
+    yieldsByChannelSSSelectionTight[5]++;
   }
 
   if (fEvent->PassesSSSelection()) {
     yieldsByChannelSSSelection[fEvent->GetFinalState()]++;
     yieldsByChannelSSSelection[5]++;
-//    fEvent->DumpEvent(eventLists2[fEvent->GetFinalState()-1], 1);
   }
 
   if (fEvent->PassesPreselection()) {
     yieldsByChannelPreselection[fEvent->GetFinalState()]++;
     yieldsByChannelPreselection[5]++;
-//    fEvent->DumpEvent(eventLists1[fEvent->GetFinalState()-1], 1);
   }
 
 //  if (!(fEvent->PassesPreselection()))  return;
-  if (!(fEvent->PassesSSSelection()))  return;
-//  if (!(fEvent->PassesFullSelection()))  return;
+//  if (!(fEvent->PassesSSSelection()))  return;
+  if (!(fEvent->PassesFullSelection()))  return;
 
   nSelectedEvents++;
 
@@ -449,12 +425,13 @@ void WJetsSelection::Finish()
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
        << "Selected events : " << GetNSelected() << "\n\n";
 
-  cout << "CHANNEL\tPreselection\tSS Selection\tTight Selection\tFull Selection" << "\n";
+  cout << "CHANNEL\tPreselection\tSS Selection\tTight SS Selection\tFull Selection\tTight Full Selection" << "\n";
   for (int i = 0; i < 6; i++) {
     cout << i << "\t" << yieldsByChannelPreselection[i]
               << "\t" << yieldsByChannelSSSelection[i]
-              << "\t" << yieldsByChannelOFSelection[i]
-              << "\t" << yieldsByChannelFullSelection[i] << "\n";
+              << "\t" << yieldsByChannelSSSelectionTight[i]
+              << "\t" << yieldsByChannelFullSelection[i]
+              << "\t" << yieldsByChannelFullSelectionTight[i] << "\n";
   }
   cout << endl;
 }

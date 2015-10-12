@@ -26,8 +26,9 @@ protected:
 
   unsigned int yieldsByChannelPreselection[6];
   unsigned int yieldsByChannelSSSelection[6];
-  unsigned int yieldsByChannelOFSelection[6];
+  unsigned int yieldsByChannelSSSelectionTight[6];
   unsigned int yieldsByChannelFullSelection[6];
+  unsigned int yieldsByChannelFullSelectionTight[6];
 
 /*
   std::ofstream eventLists1[4];

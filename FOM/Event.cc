@@ -58,7 +58,7 @@ Event::Read()
     fLeptons.push_back(mu);
   }
 
-// Good Jets
+// All Jets & Good Jets
   for (unsigned int indexJet = 0; indexJet < jetPt->size(); indexJet++) {
     Jet* jet = new Jet(indexJet, jetPt->at(indexJet), jetEta->at(indexJet),
                        jetPhi->at(indexJet), jetEn->at(indexJet), jetPartonID->at(indexJet));
@@ -214,22 +214,16 @@ Event::PassesFullSelection()
   bool passed = false;
   if (!PassesPreselection() || !PassesSSSelection() || !PassesOFSelection())  return passed;
 
-  const double wPt = fLeptons.at(fCandidateLeptonIndex.first)->Pt();
-  const double fakePt = fLeptons.at(fCandidateLeptonIndex.second)->Pt();
+// Requirement: nJets <= GOODJET_NCUT (= 3)
+  unsigned int nGoodJetsCut = 0;
+  for (vector<unsigned int>::const_iterator jIt = fGoodJetsIndex.begin();
+       jIt != fGoodJetsIndex.end(); ++jIt) {
+    if (fJets.at(*jIt)->Pt() > GOODJET_PTCUT)  nGoodJetsCut++;
+    else  continue;
+  }
 
-  const double pxMET = pfMET * cos(pfMETPhi);
-  const double pyMET = pfMET * sin(pfMETPhi);
-  TLorentzVector lMET(pxMET, pyMET, 0., pfMET);
-  const double deltaPhiWMET = fLeptons.at(fCandidateLeptonIndex.first)->DeltaPhi(lMET);
-  const double mt = sqrt(2 * pfMET * wPt * (1 - cos(deltaPhiWMET)));
-  const double mass2L = (*(fLeptons.at(fCandidateLeptonIndex.first)) +
-                         *(fLeptons.at(fCandidateLeptonIndex.second))).M();
-  const double deltaRWFake =
-    fLeptons.at(fCandidateLeptonIndex.first)->DeltaR(*(fLeptons.at(fCandidateLeptonIndex.second)));
-
-  if (wPt > WLEPTON_PTCUT && fakePt > FAKELEPTON_PTCUT && deltaRWFake > WFAKE_DELTARCUT &&
-      pfMET > METCUT && mt > MTCUT && mass2L > MASS2LCUT)
-    passed = true;
+  if (nGoodJetsCut <= GOODJET_NCUT)  passed = true;
+  else  return passed;
 
   if (passed)  fSelectionLevel = FullSelection;
 
