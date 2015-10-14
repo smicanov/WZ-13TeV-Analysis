@@ -91,7 +91,7 @@ MakeStack(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM
   stack->GetXaxis()->SetTitleSize(0.045);
   stack->GetYaxis()->SetTitleSize(0.04);
   stack->GetXaxis()->SetTitleOffset(1.);
-  stack->GetYaxis()->SetTitleOffset(1.5);
+  stack->GetYaxis()->SetTitleOffset(1.3);
   stack->GetXaxis()->SetNdivisions(510);
   stack->GetYaxis()->SetNdivisions(510);
 
@@ -132,9 +132,9 @@ MakeStack(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM
 
 
 int
-MakeStackDeltaR(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM50,
-                TFile* f_TT, TFile* f_DYM10, TFile* f_WJets,
-                TString histKey, TString xAxisTitle, double max)
+MakeStackLog(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile* f_DYM50,
+          TFile* f_TT, TFile* f_DYM10, TFile* f_WJets,
+          TString histKey, unsigned int channel, TString xAxisTitle = "", double binWidth = 1.)
 {
   TH1D* h_WZ = (TH1D*)(f_WZ->Get(histKey))->Clone(histKey + "_WZ");
   TH1D* h_ZZ4L = (TH1D*)(f_ZZ4L->Get(histKey))->Clone(histKey + "_ZZ4L");
@@ -182,12 +182,16 @@ MakeStackDeltaR(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile*
   h_TT->SetFillColor(kAzure);
   h_WJets->SetFillColor(kMagenta-7);
 
-  stack->SetMinimum(0.0);
-  stack->SetMaximum(max);
+  stack->SetMinimum(0.1);
+  stack->SetMaximum(stack->GetMaximum() * 100);
+  gPad->SetLogy(1);
 
   stack->Draw();
   stack->GetXaxis()->SetTitle(xAxisTitle);
-  stack->GetYaxis()->SetTitle("Jets / 0.02");
+  if (binWidth >= 0.1)  stack->GetYaxis()->SetTitle(Form("Events / %1.1f GeV", binWidth));
+  else if (binWidth > 0. && binWidth < 0.1)
+    stack->GetYaxis()->SetTitle(Form("Events / %1.3f", binWidth));
+  else  stack->GetYaxis()->SetTitle("Events");
 
   stack->GetXaxis()->SetLabelFont(132);
   stack->GetYaxis()->SetLabelFont(132);
@@ -200,7 +204,7 @@ MakeStackDeltaR(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile*
   stack->GetXaxis()->SetTitleSize(0.045);
   stack->GetYaxis()->SetTitleSize(0.04);
   stack->GetXaxis()->SetTitleOffset(1.);
-  stack->GetYaxis()->SetTitleOffset(1.5);
+  stack->GetYaxis()->SetTitleOffset(1.3);
   stack->GetXaxis()->SetNdivisions(510);
   stack->GetYaxis()->SetNdivisions(510);
 
@@ -227,6 +231,14 @@ MakeStackDeltaR(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW, TFile*
   latexLabel.SetTextAlign(12);
   latexLabel.SetTextSize(0.04);
   latexLabel.DrawLatex(0.19, 0.9, Form("#font[132]{#intL dt = %1.1f fb^{-1}}", 1.));
+
+  latexLabel.SetTextSize(0.05);
+  if (channel == 0) latexLabel.DrawLatex(0.44, 0.95, "#font[132]{Channel undefined}");
+  if (channel == 1) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W ele - Fake ele}");
+  if (channel == 2) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W ele - Fake #mu}");
+  if (channel == 3) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W #mu - Fake ele}");
+  if (channel == 4) latexLabel.DrawLatex(0.4, 0.95, "#font[132]{Channel W #mu - Fake #mu}");
+  if (channel == 5) latexLabel.DrawLatex(0.46, 0.95, "#font[132]{All Channels}");
 
   return 1;
 }
@@ -434,7 +446,7 @@ MakeSignificanceGraphs(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW,
   g_sF_WJets->GetXaxis()->SetTitleSize(0.045);
   g_sF_WJets->GetYaxis()->SetTitleSize(0.04);
   g_sF_WJets->GetXaxis()->SetTitleOffset(1.);
-  g_sF_WJets->GetYaxis()->SetTitleOffset(1.5);
+  g_sF_WJets->GetYaxis()->SetTitleOffset(1.3);
   g_sF_WJets->GetXaxis()->SetNdivisions(510);
   g_sF_WJets->GetYaxis()->SetNdivisions(510);
 
@@ -522,7 +534,7 @@ MakeSignificanceGraphs(TFile* f_WZ, TFile* f_ZZ4L, TFile* f_ZZ2L2Q, TFile* f_WW,
   g_significance_WJets->GetXaxis()->SetTitleSize(0.045);
   g_significance_WJets->GetYaxis()->SetTitleSize(0.04);
   g_significance_WJets->GetXaxis()->SetTitleOffset(1.);
-  g_significance_WJets->GetYaxis()->SetTitleOffset(1.5);
+  g_significance_WJets->GetYaxis()->SetTitleOffset(1.3);
   g_significance_WJets->GetXaxis()->SetNdivisions(510);
   g_significance_WJets->GetYaxis()->SetNdivisions(510);
 
@@ -580,14 +592,14 @@ main()
 {
   const MyStyle rootStyle(600);
 
-  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WZ.root");
-  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/ZZ4L.root");
-  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/ZZ2L2Q.root");
-  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WW.root");
-  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/DYM50.root");
-  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/TT.root");
-  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/DYM10to50.root");
-  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/WJets.root");
+  TFile* f_WZ   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/WZ.root");
+  TFile* f_ZZ4L   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/ZZ4L.root");
+  TFile* f_ZZ2L2Q   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/ZZ2L2Q.root");
+  TFile* f_WW   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/WW.root");
+  TFile* f_DYM50   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/DYM50.root");
+  TFile* f_TT   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/TT.root");
+  TFile* f_DYM10   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/DYM10to50.root");
+  TFile* f_WJets   = TFile::Open("/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/WJets.root");
 
   unsigned int n = 6;
 
@@ -605,27 +617,27 @@ main()
       "GoodJetsCutLeadCut", "DRminGoodJetCutWlLeadCut", "DRminGoodJetCutFakelLeadCut",
       "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
 
-  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/plots/stack/";
+  const string path = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/plots/stack/";
   vector<string> xAxisHisto =
     { "W lepton p_{t} [GeV]", "W lepton #eta", "W lepton #Phi", "W lepton relIso",
       "Fake lepton p_{t} [GeV]", "Fake lepton #eta", "Fake lepton #Phi", "Fake lepton relIso",
       "|#Delta#Phi (W l, Fake l)|", "#DeltaR (W l, Fake l)",
       "missing E_{t} [GeV]", "missing E_{t} #Phi" ,
       "|#Delta#Phi (W l, miss E_{t})|", "#DeltaR (W l, miss E_{t})", "|#Delta#Phi (Fake l, miss E_{t})|", "#DeltaR (Fake l, miss E_{t})",
-       "W M_{t} [GeV]", "Fake M_{t} [GeV]",
-       "|#Delta#Phi (W boson, W l)|", "#DeltaR (W boson, W l)", "|#Delta#Phi (W boson, Fake l)|", "#DeltaR (W boson, Fake l)",
-       "|#Delta#Phi (Fake boson, W l)|", "#DeltaR (Fake boson, W l)", "|#Delta#Phi (Fake boson, Fake l)|", "#DeltaR (Fake boson, Fake l)",
-       "mass_{2l} [GeV]",
-       "Number of good Jets (p_{t}^{jet} > 10 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{jet} > 10 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{jet} > 10 GeV))",
-       "Number of good Jets (p_{t}^{good jet} > 30 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 30 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 30 GeV))",
-       "Number of good Jets (p_{t}^{lead jet} > 45 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 GeV))",
-       "Number of good Jets (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV)",
-       "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV))",
-       "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 45 GeV & p_{t}^{good jet} > 30 GeV))",
-       "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
+      "W M_{t} [GeV]", "Fake M_{t} [GeV]",
+      "|#Delta#Phi (W boson, W l)|", "#DeltaR (W boson, W l)", "|#Delta#Phi (W boson, Fake l)|", "#DeltaR (W boson, Fake l)",
+      "|#Delta#Phi (Fake boson, W l)|", "#DeltaR (Fake boson, W l)", "|#Delta#Phi (Fake boson, Fake l)|", "#DeltaR (Fake boson, Fake l)",
+      "mass_{2l} [GeV]",
+      "Number of good Jets (p_{t}^{jet} > 10 GeV)",
+      "#DeltaR_{min} (W l, good jet (p_{t}^{jet} > 10 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{jet} > 10 GeV))",
+      "Number of good Jets (p_{t}^{good jet} > 30 GeV)",
+      "#DeltaR_{min} (W l, good jet (p_{t}^{good jet} > 30 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{good jet} > 30 GeV))",
+      "Number of good Jets (p_{t}^{lead jet} > 30 GeV)",
+      "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 30 GeV))", "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 30 GeV))",
+      "Number of good Jets (p_{t}^{lead jet} > 30 GeV & p_{t}^{good jet} > 30 GeV)",
+      "#DeltaR_{min} (W l, good jet (p_{t}^{lead jet} > 30 GeV & p_{t}^{good jet} > 30 GeV))",
+      "#DeltaR_{min} (Fake l, good jet (p_{t}^{lead jet} > 30 GeV & p_{t}^{good jet} > 30 GeV))",
+      "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
 
   vector<double> binWidthHisto = { 2.0, 0.1, 0.087267, 0.002, 1.0, 0.1, 0.087267, 0.05, 0.04363, 0.05,
                                    2.0, 0.087267, 0.04363, 0.05, 0.04363, 0.05, 2.0, 2.0,
@@ -648,44 +660,43 @@ main()
       delete canvas[i];
     }
   }
-/*
-  for (unsigned int jets = 0; jets < jetsName.size(); jets++) {
+
+  vector<string> histoNameLog =
+    { "WPt", "WEta", "FakePt", "FakeEta", "MET", "WMt", "FakeMt", "2LMass",
+      "LeadJetPt", "LeadJetEta", "LeadJetEt" };
+
+  vector<string> xAxisHistoLog =
+    { "W lepton p_{t} [GeV]", "W lepton #eta",
+      "Fake lepton p_{t} [GeV]", "Fake lepton #eta",
+      "missing E_{t} [GeV]", "W M_{t} [GeV]", "Fake M_{t} [GeV]", "mass_{2l} [GeV]",
+      "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet E_{t} [GeV]" };
+
+  vector<double> binWidthHistoLog = { 2.0, 0.1, 1.0, 0.1, 2.0, 2.0, 2.0, 2.0, 2.0, 0.1, 2.0 };
+
+  for (unsigned int histoLog = 0; histoLog < histoNameLog.size(); histoLog++) {
     TCanvas* canvas[n];
     for (unsigned int i = 0; i < n; i++) {
-      canvas[i] = new TCanvas((jetsName.at(jets) + "_" + boost::lexical_cast<string>(i)).c_str(),
-                              jetsName.at(jets).c_str());
+      canvas[i] = new TCanvas((histoNameLog.at(histoLog) + "_log_" + boost::lexical_cast<string>(i)).c_str(),
+                              histoNameLog.at(histoLog).c_str());
       canvas[i]->cd();
-      MakeStack(f_WZ, f_ZZ4L, f_ZZ2L2Q, f_WW, f_DYM50, f_TT, f_DYM10, f_WJets,
-                ("h" + jetsName.at(jets) + "_" + boost::lexical_cast<string>(i)).c_str(),
-                i, xAxisJets.c_str(), 0.);
-      canvas[i]->SaveAs((path + jetsName.at(jets) + "_" +
+      MakeStackLog(f_WZ, f_ZZ4L, f_ZZ2L2Q, f_WW, f_DYM50, f_TT, f_DYM10, f_WJets,
+                ("h" + histoNameLog.at(histoLog) + "_" + boost::lexical_cast<string>(i)).c_str(),
+                i, xAxisHistoLog.at(histoLog).c_str(), binWidthHistoLog.at(histoLog));
+      canvas[i]->SaveAs((path + histoNameLog.at(histoLog) + "_log_" +
                         boost::lexical_cast<string>(i) + ".pdf").c_str());
       delete canvas[i];
     }
   }
-*/
-/*
-  vector<string> deltaRJets = { "DeltaRL", "DeltaRMu", "DeltaREle" };
-  vector<string> xAxisDeltaR =
-    { "#deltaR_{min}(jet, lepton)", "#deltaR_{min}(jet, muon)", "#deltaR_{min}(jet, electron)" };
-  for (unsigned int i = 0; i < deltaRJets.size(); i++) {
-    TCanvas* canvas = new TCanvas(deltaRJets.at(i).c_str(), deltaRJets.at(i).c_str());
-    canvas->cd();
-    double max = 10000.;
-    i ? max = 6000. : max = 12000.;
-    MakeStackDeltaR(f_WZ, f_ZZ4L, f_ZZ2L2Q, f_WW, f_DYM50, f_TT, f_DYM10, f_WJets
-                    ("h" + deltaRJets.at(i)).c_str(), xAxisDeltaR.at(i).c_str(), max);
-    canvas->SaveAs((path + deltaRJets.at(i) + ".pdf").c_str());
-    delete canvas;
-  }
-*/
 
-  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt45GeV/NoRelIso/SSSelection/plots/cuts/";
-  vector<string> graphName = { "LeadJetPt", "LeadJetEta", "LeadJetPhi", "LeadJetEt" };
-  vector<string> xAxisGraph = { "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet #phi", "Lead jet E_{t} [GeV]" };
-  vector<double> startGraph = { 0., -2.5, -3.1416, 0. };
-  vector<double> endGraph = { 250., 2.5, 3.1416, 250. };
-  vector<double> binWidthGraph = { 2., 0.1, 0.087267, 2. };
+  const string pathGraph = "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/fom/GoodJetPt30GeV_LeadJetPt30GeV_NJets3/NoRelIso/FullSelection/plots/cuts/";
+  vector<string> graphName =
+    { "LeadJetPt", "LeadJetEta", "LeadJetEt" , "WPt", "MET", "WMt", "2LMass" };
+  vector<string> xAxisGraph =
+    { "Lead jet p_{t} [GeV]", "Lead jet #eta", "Lead jet E_{t} [GeV]",
+      "W lepton p_{t} [GeV]", "missing E_{t} [GeV]", "W M_{t} [GeV]", "mass_{2l} [GeV]" };
+  vector<double> startGraph = { 0., -2.5, 0., 0., 0., 0., 0. };
+  vector<double> endGraph = { 250., 2.5, 250., 200., 200., 200., 200. };
+  vector<double> binWidthGraph = { 2., 0.1, 2., 2., 2., 2., 2. };
   for (unsigned int graph = 0; graph < graphName.size(); graph++) {
     TCanvas* canvas[n];
     for (unsigned int i = 0; i < n; i++) {
