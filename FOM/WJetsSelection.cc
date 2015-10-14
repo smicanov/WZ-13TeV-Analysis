@@ -130,9 +130,13 @@ void WJetsSelection::Init()
   for (int i = 0; i < 6; i++) {
     yieldsByChannelPreselection[i] = 0;
     yieldsByChannelSSSelection[i] = 0;
+    yieldsByChannelSSSelectionTrigger[i] = 0;
     yieldsByChannelSSSelectionTight[i] = 0;
+    yieldsByChannelSSSelectionTightTrigger[i] = 0;
     yieldsByChannelFullSelection[i] = 0;
+    yieldsByChannelFullSelectionTrigger[i] = 0;
     yieldsByChannelFullSelectionTight[i] = 0;
+    yieldsByChannelFullSelectionTightTrigger[i] = 0;
   }
 }
 
@@ -141,9 +145,19 @@ void WJetsSelection::Analysis()
 {
   nAnalyzedEvents++;
 
+  if (fEvent->PassesFullSelection() && fEvent->PassesTight() && fEvent->PassesTrigger()) {
+    yieldsByChannelFullSelectionTightTrigger[fEvent->GetFinalState()]++;
+    yieldsByChannelFullSelectionTightTrigger[5]++;
+  }
+
   if (fEvent->PassesFullSelection() && fEvent->PassesTight()) {
     yieldsByChannelFullSelectionTight[fEvent->GetFinalState()]++;
     yieldsByChannelFullSelectionTight[5]++;
+  }
+
+  if (fEvent->PassesFullSelection() && fEvent->PassesTrigger()) {
+    yieldsByChannelFullSelectionTrigger[fEvent->GetFinalState()]++;
+    yieldsByChannelFullSelectionTrigger[5]++;
   }
 
   if (fEvent->PassesFullSelection()) {
@@ -151,9 +165,19 @@ void WJetsSelection::Analysis()
     yieldsByChannelFullSelection[5]++;
   }
 
+  if (fEvent->PassesSSSelection() && fEvent->PassesTight() && fEvent->PassesTrigger()) {
+    yieldsByChannelSSSelectionTightTrigger[fEvent->GetFinalState()]++;
+    yieldsByChannelSSSelectionTightTrigger[5]++;
+  }
+
   if (fEvent->PassesSSSelection() && fEvent->PassesTight()) {
     yieldsByChannelSSSelectionTight[fEvent->GetFinalState()]++;
     yieldsByChannelSSSelectionTight[5]++;
+  }
+
+  if (fEvent->PassesSSSelection() && fEvent->PassesTrigger()) {
+    yieldsByChannelSSSelectionTrigger[fEvent->GetFinalState()]++;
+    yieldsByChannelSSSelectionTrigger[5]++;
   }
 
   if (fEvent->PassesSSSelection()) {
@@ -168,7 +192,8 @@ void WJetsSelection::Analysis()
 
 //  if (!(fEvent->PassesPreselection()))  return;
 //  if (!(fEvent->PassesSSSelection()))  return;
-  if (!(fEvent->PassesFullSelection()))  return;
+//  if (!(fEvent->PassesFullSelection()))  return;
+  if (!(fEvent->PassesFullSelection() && fEvent->PassesTrigger()))  return;
 
   nSelectedEvents++;
 
@@ -425,13 +450,17 @@ void WJetsSelection::Finish()
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
        << "Selected events : " << GetNSelected() << "\n\n";
 
-  cout << "CHANNEL\tPreselection\tSS Selection\tTight SS Selection\tFull Selection\tTight Full Selection" << "\n";
+  cout << "CHANNEL\tPreselection\tSS Selection\tSS Selection & HLT\tTight SS Selection\tTight SS Selection & HLT\tFull Selection\tFull Selection & HLT\tTight Full Selection\tTight Full Selection & HLT" << "\n";
   for (int i = 0; i < 6; i++) {
     cout << i << "\t" << yieldsByChannelPreselection[i]
               << "\t" << yieldsByChannelSSSelection[i]
+              << "\t" << yieldsByChannelSSSelectionTrigger[i]
               << "\t" << yieldsByChannelSSSelectionTight[i]
+              << "\t" << yieldsByChannelSSSelectionTightTrigger[i]
               << "\t" << yieldsByChannelFullSelection[i]
-              << "\t" << yieldsByChannelFullSelectionTight[i] << "\n";
+              << "\t" << yieldsByChannelFullSelectionTrigger[i]
+              << "\t" << yieldsByChannelFullSelectionTight[i]
+              << "\t" << yieldsByChannelFullSelectionTightTrigger[i] << "\n";
   }
   cout << endl;
 }

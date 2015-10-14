@@ -26,16 +26,14 @@ protected:
 
   unsigned int yieldsByChannelPreselection[6];
   unsigned int yieldsByChannelSSSelection[6];
+  unsigned int yieldsByChannelSSSelectionTrigger[6];
   unsigned int yieldsByChannelSSSelectionTight[6];
+  unsigned int yieldsByChannelSSSelectionTightTrigger[6];
   unsigned int yieldsByChannelFullSelection[6];
+  unsigned int yieldsByChannelFullSelectionTrigger[6];
   unsigned int yieldsByChannelFullSelectionTight[6];
+  unsigned int yieldsByChannelFullSelectionTightTrigger[6];
 
-/*
-  std::ofstream eventLists1[4];
-  std::ofstream eventLists2[4];
-  std::ofstream eventLists3[4];
-  std::ofstream eventLists4[4];
-*/
 
   TH1D* hWPt[6];
   TH1D* hWEta[6];

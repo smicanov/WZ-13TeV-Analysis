@@ -45,6 +45,7 @@ public:
   bool PassesOFSelection();
   bool PassesFullSelection();
   bool PassesTight();
+  bool PassesTrigger();
 
   FinalState GetFinalState() { return fFinalState; }
   SelectionLevel GetSelectionLevel() { return fSelectionLevel; }

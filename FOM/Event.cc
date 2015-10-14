@@ -248,6 +248,28 @@ Event::PassesTight()
 }
 
 
+bool
+Event::PassesTrigger()
+{
+  bool passed = false;
+  if (!PassesPreselection() || !fFinalState)  return passed;
+
+  if (fFinalState == WEleFakeEle || fFinalState == WEleFakeMu) {
+    if (HLTEleMuX>>ELE22_LOOSE_BIT&1 || HLTEleMuX>>ELE22_TIGHT_BIT&1 ||
+        HLTEleMuX>>ELE27_LOOSE_BIT&1 || HLTEleMuX>>ELE27_TIGHT_BIT&1 ||
+        HLTEleMuX>>ELE32_LOOSE_BIT&1 || HLTEleMuX>>ELE32_TIGHT_BIT&1 ||
+        HLTEleMuX>>ELE23_LOOSE_BIT&1)
+      passed = true;
+  } else if (fFinalState == WMuFakeEle || fFinalState == WMuFakeMu) {
+    if (HLTEleMuX>>MU24_BIT&1 || HLTEleMuX>>MU27_BIT&1 ||
+        HLTEleMuX>>MU45_BIT&1 || HLTEleMuX>>MU55_BIT&1)
+      passed = true;
+  }
+
+  return passed;
+}
+
+
 void
 Event::Dump(ostream& out, int verbosity)
 {

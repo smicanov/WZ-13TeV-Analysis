@@ -143,3 +143,21 @@
 
 #define GOODJET_NCUT  3
 
+
+// ### Single Lepton HLT bits
+
+// Ele
+#define ELE22_LOOSE_BIT  0
+#define ELE22_TIGHT_BIT  1
+#define ELE27_LOOSE_BIT  2
+#define ELE27_TIGHT_BIT  3
+#define ELE32_LOOSE_BIT  4
+#define ELE32_TIGHT_BIT  5
+#define ELE23_LOOSE_BIT  6
+
+// Mu
+#define MU24_BIT  24
+#define MU27_BIT  25
+#define MU45_BIT  26
+#define MU55_BIT  27
+
