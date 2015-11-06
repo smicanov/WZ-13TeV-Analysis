@@ -55,7 +55,7 @@ void WZSelection::Init()
   }
 
 
-  for (int i = 0; i <= 4; i++) {
+  for (int i = 0; i <= 5; i++) {
     yieldsByChannelPreselection[i] = 0;
     yieldsByChannelZSelection[i] = 0;
     yieldsByChannelWSelection[i] = 0;
@@ -63,7 +63,7 @@ void WZSelection::Init()
   }
 
   // Setup selected event lists 
-  for (int i = 1; i <= 4; i++) {
+/*  for (int i = 1; i <= 4; i++) {
 
     ostringstream outputFileName1;
     outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/mc/WZ_FullSelection_" << i << ".txt";
@@ -85,7 +85,7 @@ void WZSelection::Init()
     cout << "File name : " << outputFileName4.str() << endl;
     eventLists4[i-1].open(outputFileName4.str().c_str());
   }
-
+*/
 }
 
 
@@ -93,28 +93,33 @@ void WZSelection::Analysis()
 {
   nAnalyzedEvents++;
 
-  if (fWZEvent->PassesFullSelection()) {
-    yieldsByChannelFullSelection[fWZEvent->GetFinalState()-1]++;
-    yieldsByChannelFullSelection[4]++;
-    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
+  if (fWZEvent->PassesTrigger() && fWZEvent->PassesFullSelection()) {
+    yieldsByChannelFullSelection[fWZEvent->GetFinalState()]++;
+    yieldsByChannelFullSelection[5]++;
+//    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesWSelection()) {
-    yieldsByChannelWSelection[fWZEvent->GetFinalState()-1]++;
-    yieldsByChannelWSelection[4]++;
-    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
+  if (fWZEvent->PassesTrigger() && fWZEvent->PassesWSelection()) {
+    yieldsByChannelWSelection[fWZEvent->GetFinalState()]++;
+    yieldsByChannelWSelection[5]++;
+//    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesZSelection()){
-    yieldsByChannelZSelection[fWZEvent->GetFinalState()-1]++;
-    yieldsByChannelZSelection[4]++;
-    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
+  if (fWZEvent->PassesTrigger() && fWZEvent->PassesZSelection()){
+    yieldsByChannelZSelection[fWZEvent->GetFinalState()]++;
+    yieldsByChannelZSelection[5]++;
+//    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
   }
 
-  if (fWZEvent->PassesPreselection()) {
-    yieldsByChannelPreselection[fWZEvent->GetFinalState()-1]++;
-    yieldsByChannelPreselection[4]++;
-    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
+  if (fWZEvent->PassesTrigger() && fWZEvent->PassesPreselection()) {
+    yieldsByChannelPreselection[fWZEvent->GetFinalState()]++;
+    yieldsByChannelPreselection[5]++;
+//    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
+  }
+
+  if (fWZEvent->PassesTrigger()) {
+    yieldsByChannelTrigger[fWZEvent->GetFinalState()]++;
+    yieldsByChannelTrigger[5]++;
   }
 
   if (!(fWZEvent->PassesFullSelection()))  return;
@@ -242,12 +247,13 @@ void WZSelection::Finish()
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
        << "Selected events : " << GetNSelected() << "\n\n";
 
-  cout << "CHANNEL\tPreselection\tZ Selection\tW Selection\tFull Selection"<< "\n";
-  for (int i = 1; i <= 5; i++) {
-    cout << i << "\t" << yieldsByChannelPreselection[i-1]
-              << "\t" << yieldsByChannelZSelection[i-1]
-              << "\t" << yieldsByChannelWSelection[i-1]
-              << "\t" << yieldsByChannelFullSelection[i-1] << "\n";
+  cout << "CHANNEL\tTriggers\tPreselection\tZ Selection\tW Selection\tFull Selection"<< "\n";
+  for (int i = 0; i <= 5; i++) {
+    cout << i << "\t" << yieldsByChannelTrigger[i]
+              << "\t" << yieldsByChannelPreselection[i]
+              << "\t" << yieldsByChannelZSelection[i]
+              << "\t" << yieldsByChannelWSelection[i]
+              << "\t" << yieldsByChannelFullSelection[i] << "\n";
   }
   cout << endl;
 }

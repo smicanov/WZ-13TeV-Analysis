@@ -1,9 +1,9 @@
 #ifndef WZEvent_h
 #define WZEvent_h
 
-#define WZBASECLASS EventTree_V07_04_09_01
+#define WZBASECLASS EventTree_V07_04_14_00
 
-#include "EventTree_V07_04_09_01.h"
+#include "EventTree_V07_04_14_00.h"
 #include "Particles.h"
 
 #include <vector>
@@ -43,6 +43,7 @@ public:
 
   vector<bool> GetHLT25ns() { return fHLT25ns; }
 
+  bool PassesTrigger();
   bool PassesPreselection();
   bool PassesZSelection();
   bool PassesWSelection();
@@ -64,15 +65,11 @@ protected:
   void Clear();
 
   vector<bool> fHLT25ns;
-// 0 - HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v2         - bit  8
-// 1 - HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v2               - bit 20
-// 2 - HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v2             - bit 11
-// 3 - HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v2    - bit 41
-// 4 - HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v2   - bit 42
-// 5 - HLT_Ele16_Ele12_Ele8_CaloIdL_TrackIdL_v2             - bit  9
-// 6 - HLT_Mu8_DiEle12_CaloIdL_TrackIdL_v2                  - bit 43
-// 7 - HLT_DiMu9_Ele9_CaloIdL_TrackIdL_v2                   - bit 44
-// 8 - HLT_TripleMu_12_10_5_v2                              - bit 28
+// 0 - HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v        - bit  7
+// 1 - HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v              - bit 20
+// 2 - HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v            - bit 21
+// 3 - HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v   - bit 50
+// 4 - HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v  - bit 51
 
   FinalState fFinalState;
   SelectionLevel fSelectionLevel;

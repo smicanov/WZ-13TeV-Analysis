@@ -87,8 +87,8 @@
 #define GLOBALMUON_BIT  1
 #define TRACKERMUON_BIT  2
 #define PFMUON_BIT  5
-#define RELISO_MU_LOOSE  0.2
-#define RELISO_MU_TIGHT  0.12
+#define MU_RELISO_LOOSE  0.2
+#define MU_RELISO_TIGHT  0.12
 #define MU_PTCUT  10.
 #define MU_ETACUT  2.4
 

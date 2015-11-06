@@ -244,16 +244,25 @@ Muon::IsLoose()
   bool loose = false;
 
   if (fWZTree == 0) {
-    cout << "WZTree pointer is ZERO!!!! \n";
+    cout << "Tree pointer is ZERO!!!! \n";
     return loose;
   }
 
   if (!(fWZTree->nMu))  return loose;
 
-  if ((fWZTree->muType->at(fIndex)>>GLOBALMUON_BIT&1 || fWZTree->muType->at(fIndex)>>TRACKERMUON_BIT&1) &&
-      fWZTree->muType->at(fIndex)>>PFMUON_BIT&1 &&
-      fRelIso < RELISO_MU_LOOSE)
-    loose = true;
+  bool looseCut = false;
+  if ((fWZTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 || fWZTree->muType->at(fIndex)>>TRACKERMUON_BIT & 1) &&
+      fWZTree->muType->at(fIndex)>>PFMUON_BIT & 1)
+    looseCut = true;
+
+  bool looseVID = false;
+  if (fWZTree->muIsLooseID->at(fIndex))  looseVID = true;
+  if (looseCut != looseVID) {
+    cout << "Error: VID different from Cut Based for Mu LOOSE !!!" << endl;
+    cout << "VID : " << looseVID << ", Cut Based : " << looseCut << endl;
+  }
+
+  if (looseCut && fRelIso < MU_RELISO_LOOSE)  loose = true;
 
   return loose;
 }
@@ -265,12 +274,13 @@ Muon::IsTight()
   bool tight = false;
 
   if (fWZTree == 0) {
-    cout << "WZTree pointer is ZERO!!!! \n";
+    cout << "Tree pointer is ZERO!!!! \n";
     return tight;
   }
 
   if (!(fWZTree->nMu))  return tight;
 
+  bool tightCut = false;
   if (fWZTree->muChi2NDF->at(fIndex) < 10. &&
       fWZTree->muMuonHits->at(fIndex) > 0 &&
       fWZTree->muStations->at(fIndex) > 1 &&
@@ -278,10 +288,18 @@ Muon::IsTight()
       abs(fWZTree->muDz->at(fIndex)) < 0.5 &&
       fWZTree->muPixelHits->at(fIndex) > 0 &&
       fWZTree->muTrkLayers->at(fIndex) > 5 &&
-      fWZTree->muType->at(fIndex)>>GLOBALMUON_BIT&1 &&
-      fWZTree->muType->at(fIndex)>>PFMUON_BIT&1 &&
-      fRelIso < RELISO_MU_TIGHT)
-    tight = true;
+      fWZTree->muType->at(fIndex)>>GLOBALMUON_BIT & 1 &&
+      fWZTree->muType->at(fIndex)>>PFMUON_BIT & 1)
+    tightCut = true;
+
+  bool tightVID = false;
+  if (fWZTree->muIsTightID->at(fIndex))  tightVID = true;
+  if (tightCut != tightVID) {
+    cout << "Error: VID different from Cut Based for Mu TIGHT !!!" << endl;
+    cout << "VID : " << tightVID << ", Cut Based : " << tightCut << endl;
+  }
+
+  if (tightCut && fRelIso < MU_RELISO_TIGHT)  tight = true;
 
   return tight;
 }

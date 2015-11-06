@@ -38,12 +38,12 @@ void WZEvent::Read()
 {
   Clear();
 
-// in ggNtuplizer versions V07-04-09+
+// in ggNtuplizer versions V07-04-14-00
   if (HLTEleMuX) {
-    const vector<unsigned int> hlt25nsBits { 8, 20, 21, 41, 42, 9, 43, 44, 28 };
+    const vector<unsigned int> hlt25nsBits { 7, 20, 21, 50, 51 };
         for (vector<unsigned int>::const_iterator bIt = hlt25nsBits.begin();
          bIt != hlt25nsBits.end(); ++bIt) {
-      (HLTEleMuX>>(*bIt)&1)  ?  fHLT25ns.push_back(true)  :  fHLT25ns.push_back(false);
+      (HLTEleMuX>>(*bIt) & 1)  ?  fHLT25ns.push_back(true)  :  fHLT25ns.push_back(false);
     }
   }
 
@@ -60,6 +60,20 @@ void WZEvent::Read()
                         muPhi->at(indexMu), muCharge->at(indexMu));
     fLeptons.push_back(mu);
   }
+}
+
+
+bool
+WZEvent::PassesTrigger()
+{
+  bool passed = false;
+
+  for (vector<bool>::const_iterator bIt = fHLT25ns.begin(); bIt != fHLT25ns.end(); ++bIt) {
+    if (*bIt)  passed = true;
+    else  continue;
+  }
+
+  return passed;
 }
 
 
