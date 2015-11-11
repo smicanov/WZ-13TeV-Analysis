@@ -7,7 +7,6 @@
 #include "Particles.h"
 
 #include <vector>
-#include <iostream>
 
 
 enum FinalState
@@ -31,6 +30,13 @@ enum SelectionLevel
 };
 
 
+enum SelectionType
+{
+  Nominal,      // 0
+  MatrixMethod  // 1
+};
+
+
 class WZEvent : public WZBASECLASS
 {
 
@@ -44,10 +50,10 @@ public:
   vector<bool> GetHLT25ns() { return fHLT25ns; }
 
   bool PassesTrigger();
-  bool PassesPreselection();
-  bool PassesZSelection();
-  bool PassesWSelection();
-  bool PassesFullSelection();
+  bool PassesPreselection(SelectionType type = Nominal);
+  bool PassesZSelection(SelectionType type = Nominal);
+  bool PassesWSelection(SelectionType type = Nominal);
+  bool PassesFullSelection(SelectionType type = Nominal);
 
   FinalState GetFinalState() { return fFinalState; }
   SelectionLevel GetSelectionLevel() { return fSelectionLevel; }
