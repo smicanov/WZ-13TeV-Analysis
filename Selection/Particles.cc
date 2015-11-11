@@ -68,6 +68,7 @@ Lepton::Lepton(unsigned int index, double pt, double eta, double phi, double cha
   : Particle(index, pt, eta, phi) 
 {
   fCharge = charge;
+  fScaleFactor = 0.; // Waiting for real implementation
 }
 
 
