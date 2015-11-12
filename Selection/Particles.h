@@ -27,7 +27,7 @@ public:
 
 protected:
 
-  int fIndex;
+  unsigned int fIndex;
 
   static WZEvent* fWZTree;
 

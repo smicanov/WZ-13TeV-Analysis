@@ -87,12 +87,12 @@ bool WZEvent::PassesPreselection(SelectionType type)
 
   if((nEle + nMu) < 3)  return passed;
 
-// Nominal Selection
+  unsigned int nEleTight = 0;
+  unsigned int nMuTight = 0;
+
+// ## Nominal Selection ##
   if (type == Nominal)
   {
-    unsigned int nEleTight = 0;
-    unsigned int nMuTight = 0;
-
     for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
       if ((*lIt)->PassesPtCut() && (*lIt)->PassesEtaCut() && (*lIt)->IsTight()) {
         unsigned int index = distance(fLeptons.begin(), lIt);
@@ -110,21 +110,42 @@ bool WZEvent::PassesPreselection(SelectionType type)
 
     // ### put the condition on number of tight leptons here!!! ###
     if (fTightLeptonsIndex.size() == N_TIGHTLEPTONS)  passed = true;
+  }
 
-    if (passed) {
-      fSelectionLevel = Preselection;
-      if      (nEleTight == 3 && nMuTight == 0)  fFinalState = eee;
-      else if (nEleTight == 2 && nMuTight == 1)  fFinalState = eem;
-      else if (nEleTight == 1 && nMuTight == 2)  fFinalState = mme;
-      else if (nEleTight == 0 && nMuTight == 3)  fFinalState = mmm;
+// ## Matrix Method Selection ##
+  if (type == MatrixMethod)
+  {
+    for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ++lIt) {
+      if ((*lIt)->PassesPtCut() && (*lIt)->PassesEtaCut() && (*lIt)->IsLoose()) {
+        unsigned int index = distance(fLeptons.begin(), lIt);
+        fTightLeptonsIndex.push_back(index);
+        if ((*lIt)->GetPdgId() == 11)       nEleTight++;
+        else if ((*lIt)->GetPdgId() == 13)  nMuTight++;
+      }
+    }
+
+    if (nMuTight + nEleTight != fTightLeptonsIndex.size()) {
+      cout << "ERROR: Number of Loose leptons DIFFERS from number of Loose lepton indices !!!" << endl;
+      cout << nMuTight << " + " << nEleTight << " != " << fTightLeptonsIndex.size() << endl;
+      return passed;
+    }
+
+    // ### put the condition on number of loose and tight leptons here!!! ###
+    if (fTightLeptonsIndex.size() >= N_TIGHTLEPTONS) {
+      unsigned int nTight = 0;
+      for (vector<unsigned int>::const_iterator iIt = fTightLeptonsIndex.begin();
+           iIt != fTightLeptonsIndex.end(); ++iIt)
+        if (fLeptons.at(*iIt)->IsTight())  nTight++;
+      if (nTight <= N_TIGHTLEPTONS)  passed = true;
     }
   }
 
-// Matrix Method Selection
-  if (type == MatrixMethod)
-  {
-  
-
+  if (passed) {
+    fSelectionLevel = Preselection;
+    if      (nEleTight == 3 && nMuTight == 0)  fFinalState = eee;
+    else if (nEleTight == 2 && nMuTight == 1)  fFinalState = eem;
+    else if (nEleTight == 1 && nMuTight == 2)  fFinalState = mme;
+    else if (nEleTight == 0 && nMuTight == 3)  fFinalState = mmm;
   }
 
   return passed;
@@ -216,7 +237,7 @@ bool WZEvent::PassesWSelection(SelectionType type)
     }
   }
 
-  if (iWl.size() > 1)  cout << "WARNING: More than 1 W lepton - highest Pt criterium !!!" << endl;
+  if (iWl.size() > 1)  cout << "WARNING: More than 1 W lepton - applying highest Pt criterium !!!" << endl;
 
   if (iWl.size() == 0)  return passed;
   else {

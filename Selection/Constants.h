@@ -91,7 +91,7 @@
 #define MU_PTCUT  10.
 #define MU_ETACUT  2.4
 
-// general
+// ## general ##
 
 #define N_TIGHTLEPTONS  3
 
