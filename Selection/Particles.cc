@@ -119,6 +119,7 @@ Electron::IsLoose()
 
   if (!(fWZTree->nEle))  return loose;
 
+  bool looseWD = false;
   const double absEleSCEta = abs(fWZTree->eleSCEta->at(fIndex));
   if (absEleSCEta <= ETASCBARREL) {
     if (fWZTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_LOOSE &&
@@ -131,7 +132,7 @@ Electron::IsLoose()
         abs(fWZTree->eleDz->at(fIndex)) < DZ_BARREL_LOOSE &&
         fWZTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
         fWZTree->eleConvVeto->at(fIndex) == true)
-      loose = true;
+      looseWD = true;
   } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
     if (fWZTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_LOOSE &&
         abs(fWZTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_LOOSE &&
@@ -143,14 +144,40 @@ Electron::IsLoose()
         abs(fWZTree->eleDz->at(fIndex)) < DZ_ENDCAP_LOOSE &&
         fWZTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
         fWZTree->eleConvVeto->at(fIndex) == true)
-      loose = true;
+      looseWD = true;
   }
 
   bool looseVID = false;
   if (fWZTree->eleIDbit->at(fIndex)>>ELELOOSE_BIT&1)  looseVID = true;
-  if (loose != looseVID) {
+  if (looseWD != looseVID) {
     cout << "Error: VID different from Cut Based for Ele LOOSE !!!" << endl;
     cout << "VID : " << looseVID << ", Cut Based : " << loose << endl;
+  }
+
+  if (absEleSCEta <= ETASCBARREL) {
+    if (fWZTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_BARREL_LOOSE &&
+        abs(fWZTree->eledEtaAtVtx->at(fIndex)) < DETAIN_BARREL_LOOSE &&
+        abs(fWZTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_BARREL_LOOSE &&
+        fWZTree->eleHoverE->at(fIndex) < HOVERE_BARREL_LOOSE &&
+        // fRelIso < RELISO_BARREL_LOOSE &&  ->  no RelIso requirement for Loose !!!
+        abs(fWZTree->eleEoverPInv->at(fIndex)) < OOEMOOP_BARREL_LOOSE &&
+        abs(fWZTree->eleD0->at(fIndex)) < D0_BARREL_LOOSE &&
+        abs(fWZTree->eleDz->at(fIndex)) < DZ_BARREL_LOOSE &&
+        fWZTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_BARREL &&
+        fWZTree->eleConvVeto->at(fIndex) == true)
+      loose = true;
+  } else if (absEleSCEta > ETASCBARREL && absEleSCEta < ETASCENDCAP) {
+    if (fWZTree->eleSigmaIEtaIEtaFull5x5->at(fIndex) < FULL5x5_SIGMAIETAIETA_ENDCAP_LOOSE &&
+        abs(fWZTree->eledEtaAtVtx->at(fIndex)) < DETAIN_ENDCAP_LOOSE &&
+        abs(fWZTree->eledPhiAtVtx->at(fIndex)) < DPHIIN_ENDCAP_LOOSE &&
+        fWZTree->eleHoverE->at(fIndex) < HOVERE_ENDCAP_LOOSE &&
+        // fRelIso < RELISO_ENDCAP_LOOSE &&  ->  no RelIso requirement for Loose !!!
+        abs(fWZTree->eleEoverPInv->at(fIndex)) < OOEMOOP_ENDCAP_LOOSE &&
+        abs(fWZTree->eleD0->at(fIndex)) < D0_ENDCAP_LOOSE &&
+        abs(fWZTree->eleDz->at(fIndex)) < DZ_ENDCAP_LOOSE &&
+        fWZTree->eleMissHits->at(fIndex) <= EXPMISSINNERHITS_ENDCAP &&
+        fWZTree->eleConvVeto->at(fIndex) == true)
+      loose = true;
   }
 
   return loose;
@@ -263,7 +290,8 @@ Muon::IsLoose()
     cout << "VID : " << looseVID << ", Cut Based : " << looseCut << endl;
   }
 
-  if (looseCut && fRelIso < MU_RELISO_LOOSE)  loose = true;
+  if (looseCut /* && fRelIso < MU_RELISO_LOOSE  ->  noRelIso requirement for Loose !!! */ )
+    loose = true;
 
   return loose;
 }

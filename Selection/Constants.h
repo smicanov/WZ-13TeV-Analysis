@@ -1,7 +1,6 @@
 // ### Preselection ###
 
-
-// electrons
+// ## electrons ##
 
 // Barrel and Endcap
 #define ETASCBARREL  1.479 
@@ -82,7 +81,7 @@
 #define D0_ENDCAP_TIGHT  0.0351
 #define DZ_ENDCAP_TIGHT  0.417
 
-// muons
+// ## muons ##
 
 #define GLOBALMUON_BIT  1
 #define TRACKERMUON_BIT  2
