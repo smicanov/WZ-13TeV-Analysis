@@ -55,14 +55,12 @@ public:
   Lepton(unsigned int index, double pt, double eta, double phi, double ch);
 
   virtual bool IsTight() = 0;
+  virtual double CalculateScaleFactor() = 0;
 
   int GetPdgId() { return fPdgId; }
   double GetCharge() { return fCharge; }
   double GetRelIso() { return fRelIso; }
-  virtual double GetScaleFactor() {
-    std::cout << "Not implemented yet... \n";
-    return 1.;
-  }
+
 
 
 protected:
@@ -70,7 +68,6 @@ protected:
   int fPdgId;
   double fCharge;
   double fRelIso;
-  double fScaleFactor;
 
 };
 
@@ -84,6 +81,7 @@ public:
 
   bool IsLoose();
   bool IsTight();
+  double CalculateScaleFactor();
   bool PassesPtCut();
   bool PassesEtaCut();
 
@@ -99,6 +97,7 @@ public:
 
   bool IsLoose();
   bool IsTight();
+  double CalculateScaleFactor();
   bool PassesPtCut();
   bool PassesEtaCut();
 

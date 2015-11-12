@@ -68,7 +68,6 @@ Lepton::Lepton(unsigned int index, double pt, double eta, double phi, double cha
   : Particle(index, pt, eta, phi) 
 {
   fCharge = charge;
-  fScaleFactor = 0.; // Waiting for real implementation
 }
 
 
@@ -234,6 +233,49 @@ Electron::IsTight()
 }
 
 
+double
+Electron::CalculateScaleFactor()
+{
+  double sf = 0;
+
+  if (IsTight()) {
+    if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 1.0217;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9768;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9868;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9819;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9782;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 0.9844;
+    } else if (1.5 < abs(Eta()) && abs(Eta()) <= 2.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 0.9588;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9669;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9786;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9998;
+      else if (50 < Pt() && Pt() <= 100)    sf = 1.0019;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 1.0297;
+    }
+  } else if (IsLoose()) {
+    if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 1.0270;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9791;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9918;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9987;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9851;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 0.9894;
+    } else if (1.5 < abs(Eta()) && abs(Eta()) <= 2.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 0.9886;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9806;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9983;
+      else if (40 < Pt() && Pt() <= 50)     sf = 1.0095;
+      else if (50 < Pt() && Pt() <= 100)    sf = 1.0053;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 1.1020;
+    }
+  }
+
+  return sf;
+}
+
+
 bool
 Electron::PassesPtCut()
 {
@@ -331,6 +373,49 @@ Muon::IsTight()
   if (tightCut && fRelIso < MU_RELISO_TIGHT)  tight = true;
 
   return tight;
+}
+
+
+double
+Muon::CalculateScaleFactor()
+{
+  double sf = 0;
+
+  if (IsTight()) {
+    if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 0.9843;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9891;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9884;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9884;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9861;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 0.9811;
+    } else if (1.5 < abs(Eta()) && abs(Eta()) <= 2.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 0.9887;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9853;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9883;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9893;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9892;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 0.9770;
+    }
+  } else if (IsLoose()) {
+    if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 1.0025;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9990;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9991;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9998;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9986;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 1.0004;
+    } else if (1.5 < abs(Eta()) && abs(Eta()) <= 2.5) {
+      if (10 < Pt() && Pt() <= 20)          sf = 0.9943;
+      else if (20 < Pt() && Pt() <= 30)     sf = 0.9986;
+      else if (30 < Pt() && Pt() <= 40)     sf = 0.9983;
+      else if (40 < Pt() && Pt() <= 50)     sf = 0.9983;
+      else if (50 < Pt() && Pt() <= 100)    sf = 0.9990;
+      else if (100 < Pt() && Pt() <= 1000)  sf = 1.0059;
+    }
+  }
+
+  return sf;
 }
 
 
