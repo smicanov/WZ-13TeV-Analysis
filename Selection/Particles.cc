@@ -234,7 +234,7 @@ Electron::IsTight()
 
 
 double
-Electron::CalculateScaleFactor()
+Electron::ComputeScaleFactor()
 {
   double sf = 0;
 
@@ -255,6 +255,7 @@ Electron::CalculateScaleFactor()
       else if (100 < Pt() && Pt() <= 1000)  sf = 1.0297;
     }
   } else if (IsLoose()) {
+    cout << "Lepton scale factor for LOOSE electron is computed!" << endl;
     if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
       if (10 < Pt() && Pt() <= 20)          sf = 1.0270;
       else if (20 < Pt() && Pt() <= 30)     sf = 0.9791;
@@ -377,7 +378,7 @@ Muon::IsTight()
 
 
 double
-Muon::CalculateScaleFactor()
+Muon::ComputeScaleFactor()
 {
   double sf = 0;
 
@@ -398,6 +399,7 @@ Muon::CalculateScaleFactor()
       else if (100 < Pt() && Pt() <= 1000)  sf = 0.9770;
     }
   } else if (IsLoose()) {
+    cout << "Lepton scale factor for LOOSE muon is computed!" << endl;
     if (0 < abs(Eta()) && abs(Eta()) <= 1.5) {
       if (10 < Pt() && Pt() <= 20)          sf = 1.0025;
       else if (20 < Pt() && Pt() <= 30)     sf = 0.9990;

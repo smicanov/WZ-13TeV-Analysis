@@ -55,7 +55,7 @@ public:
   Lepton(unsigned int index, double pt, double eta, double phi, double ch);
 
   virtual bool IsTight() = 0;
-  virtual double CalculateScaleFactor() = 0;
+  virtual double ComputeScaleFactor() = 0;
 
   int GetPdgId() { return fPdgId; }
   double GetCharge() { return fCharge; }
@@ -81,7 +81,7 @@ public:
 
   bool IsLoose();
   bool IsTight();
-  double CalculateScaleFactor();
+  double ComputeScaleFactor();
   bool PassesPtCut();
   bool PassesEtaCut();
 
@@ -97,7 +97,7 @@ public:
 
   bool IsLoose();
   bool IsTight();
-  double CalculateScaleFactor();
+  double ComputeScaleFactor();
   bool PassesPtCut();
   bool PassesEtaCut();
 
