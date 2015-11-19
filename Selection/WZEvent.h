@@ -49,7 +49,11 @@ public:
 
   vector<bool> GetHLT25ns() { return fHLT25ns; }
 
-  bool PassesTrigger();
+  bool PassesTriggerAll();
+  bool PassesTriggerDoubleEG();
+  bool PassesTriggerDoubleMuon();
+  bool PassesTriggerMuonEG();
+
   bool PassesPreselection(SelectionType type = Nominal);
   bool PassesZSelection(SelectionType type = Nominal);
   bool PassesWSelection(SelectionType type = Nominal);

@@ -93,31 +93,31 @@ void WZYields::Analysis()
 {
   nAnalyzedEvents++;
 
-  if (fWZEvent->PassesTrigger() && fWZEvent->PassesFullSelection()) {
+  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesFullSelection()) {
     yieldsByChannelFullSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelFullSelection[5]++;
     fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesTrigger() && fWZEvent->PassesWSelection()) {
+  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesWSelection()) {
     yieldsByChannelWSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelWSelection[5]++;
     fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesTrigger() && fWZEvent->PassesZSelection()){
+  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesZSelection()){
     yieldsByChannelZSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelZSelection[5]++;
     fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
   }
 
-  if (fWZEvent->PassesTrigger() && fWZEvent->PassesPreselection()) {
+  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesPreselection()) {
     yieldsByChannelPreselection[fWZEvent->GetFinalState()]++;
     yieldsByChannelPreselection[5]++;
     fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
   }
 
-  if (fWZEvent->PassesTrigger()) {
+  if (fWZEvent->PassesTriggerAll()) {
     yieldsByChannelTrigger[fWZEvent->GetFinalState()]++;
     yieldsByChannelTrigger[5]++;
   }

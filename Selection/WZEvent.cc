@@ -64,7 +64,7 @@ void WZEvent::Read()
 
 
 bool
-WZEvent::PassesTrigger()
+WZEvent::PassesTriggerAll()
 {
   bool passed = false;
 
@@ -73,6 +73,38 @@ WZEvent::PassesTrigger()
     else  continue;
   }
 
+  return passed;
+}
+
+
+bool
+WZEvent::PassesTriggerDoubleEG()
+{
+  bool passed = false;
+  if (fHLT25ns.at(0))  passed = true;
+  if (fHLT25ns.at(1) || fHLT25ns.at(2))
+    cout << "WARNING: DoubleElectron event passed DiMuon HLT !!!" << endl;
+  return passed;
+}
+
+
+bool
+WZEvent::PassesTriggerDoubleMuon()
+{
+  bool passed = false;
+  if (!(fHLT25ns.at(0)) && (fHLT25ns.at(1) || fHLT25ns.at(2)))  passed = true;
+  if (fHLT25ns.at(0))  cout << "WARNING: DoubleMuon event passed DiEle HLT !!!" << endl;
+  return passed;
+}
+
+
+bool
+WZEvent::PassesTriggerMuonEG()
+{
+  bool passed = false;
+  if (!(fHLT25ns.at(0)) && !(fHLT25ns.at(1)) && !(fHLT25ns.at(2)) &&
+      (fHLT25ns.at(3) || fHLT25ns.at(4)))
+    passed = true;
   return passed;
 }
 
