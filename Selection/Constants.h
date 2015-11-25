@@ -109,6 +109,9 @@
 #define WLEPTON_PTCUT  20.
 #define WZ_DELTARCUT  0.1
 
+// ### all combinations of 2 selected leptons inv. mass cut ###
+
+#define MASS2LCUT  4.
 
 // ### MET ###
 

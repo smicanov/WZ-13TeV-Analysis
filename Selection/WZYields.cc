@@ -62,36 +62,42 @@ void WZYields::Init()
     yieldsByChannelFullSelection[i] = 0;
   }
 
+
   // Setup selected event lists 
   for (int i = 1; i <= 4; i++) {
 
     ostringstream outputFileName1;
-    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/FullSelection_" << i << ".txt";
+    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_FullSelection_" << i << ".txt";
     cout << "File name : " << outputFileName1.str() << endl;
     eventLists1[i-1].open(outputFileName1.str().c_str());
 
     ostringstream outputFileName2;
-    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WSelection_" << i << ".txt";
+    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_WSelection_" << i << ".txt";
     cout << "File name : " << outputFileName2.str() << endl;
     eventLists2[i-1].open(outputFileName2.str().c_str());
 
     ostringstream outputFileName3;
-    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/ZSelection_" << i << ".txt";
+    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_ZSelection_" << i << ".txt";
     cout << "File name : " << outputFileName3.str() << endl;
     eventLists3[i-1].open(outputFileName3.str().c_str());
 
     ostringstream outputFileName4;
-    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/Preselection_" << i << ".txt";
+    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_Preselection_" << i << ".txt";
     cout << "File name : " << outputFileName4.str() << endl;
     eventLists4[i-1].open(outputFileName4.str().c_str());
   }
 
+
+  minRun = maxRun = 0;
+  runNumber.clear();
 }
 
 
 void WZYields::Analysis()
 {
   nAnalyzedEvents++;
+
+  runNumber.push_back(fWZEvent->run);
 
   if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesFullSelection()) {
     yieldsByChannelFullSelection[fWZEvent->GetFinalState()]++;
@@ -246,6 +252,14 @@ void WZYields::Finish()
 
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
        << "Selected events : " << GetNSelected() << "\n\n";
+
+  vector<long unsigned int>::iterator min = min_element(runNumber.begin(), runNumber.end());
+  minRun = *min;
+  vector<long unsigned int>::iterator max = max_element(runNumber.begin(), runNumber.end());
+  maxRun = *max;
+
+  cout << "Minimum Run # : " << minRun << "\n"
+       << "Maximum Run # : " << maxRun << "\n\n";
 
   cout << "CHANNEL\tTriggers\tPreselection\tZ Selection\tW Selection\tFull Selection"<< "\n";
   for (int i = 0; i <= 5; i++) {

@@ -23,6 +23,10 @@ public:
 
 protected:
 
+  long unsigned int minRun;
+  long unsigned int maxRun;
+  vector<long unsigned int> runNumber;
+
   unsigned int nAnalyzedEvents;
   unsigned int nSelectedEvents;
 

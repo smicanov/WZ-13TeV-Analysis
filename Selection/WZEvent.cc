@@ -41,10 +41,9 @@ void WZEvent::Read()
 // in ggNtuplizer versions V07-04-14-00
   if (HLTEleMuX) {
     const vector<unsigned int> hlt25nsBits { 7, 20, 21, 50, 51 };
-        for (vector<unsigned int>::const_iterator bIt = hlt25nsBits.begin();
-         bIt != hlt25nsBits.end(); ++bIt) {
+    for (vector<unsigned int>::const_iterator bIt = hlt25nsBits.begin();
+         bIt != hlt25nsBits.end(); ++bIt)
       (HLTEleMuX>>(*bIt) & 1)  ?  fHLT25ns.push_back(true)  :  fHLT25ns.push_back(false);
-    }
   }
 
 // Electrons
@@ -67,12 +66,10 @@ bool
 WZEvent::PassesTriggerAll()
 {
   bool passed = false;
-
-  for (vector<bool>::const_iterator bIt = fHLT25ns.begin(); bIt != fHLT25ns.end(); ++bIt) {
+  if (fHLT25ns.empty())  return passed;
+  for (vector<bool>::const_iterator bIt = fHLT25ns.begin(); bIt != fHLT25ns.end(); ++bIt)
     if (*bIt)  passed = true;
     else  continue;
-  }
-
   return passed;
 }
 
@@ -81,9 +78,9 @@ bool
 WZEvent::PassesTriggerDoubleEG()
 {
   bool passed = false;
+  if (fHLT25ns.empty())  return passed;
   if (fHLT25ns.at(0))  passed = true;
-  if (fHLT25ns.at(1) || fHLT25ns.at(2))
-    cout << "WARNING: DoubleElectron event passed DiMuon HLT !!!" << endl;
+//  if (fHLT25ns.at(1) || fHLT25ns.at(2))  cout << "WARNING: DoubleElectron event passed DiMuon HLT !!!" << endl;
   return passed;
 }
 
@@ -92,8 +89,9 @@ bool
 WZEvent::PassesTriggerDoubleMuon()
 {
   bool passed = false;
+  if (fHLT25ns.empty())  return passed;
   if (!(fHLT25ns.at(0)) && (fHLT25ns.at(1) || fHLT25ns.at(2)))  passed = true;
-  if (fHLT25ns.at(0))  cout << "WARNING: DoubleMuon event passed DiEle HLT !!!" << endl;
+//  if (fHLT25ns.at(0))  cout << "WARNING: DoubleMuon event passed DiEle HLT !!!" << endl;
   return passed;
 }
 
@@ -102,6 +100,7 @@ bool
 WZEvent::PassesTriggerMuonEG()
 {
   bool passed = false;
+  if (fHLT25ns.empty())  return passed;
   if (!(fHLT25ns.at(0)) && !(fHLT25ns.at(1)) && !(fHLT25ns.at(2)) &&
       (fHLT25ns.at(3) || fHLT25ns.at(4)))
     passed = true;
@@ -250,10 +249,14 @@ bool WZEvent::PassesWSelection(SelectionType type)
        iIt != fTightLeptonsIndex.end(); ++iIt) {
     if ((int)*iIt != fZLeptonsIndex.first && (int)*iIt != fZLeptonsIndex.second) {
       const double wlPt = fLeptons.at(*iIt)->Pt();
-      const double deltaR1 = fLeptons.at(*iIt)->DeltaR(*(fLeptons.at(fZLeptonsIndex.first)));
-      const double deltaR2 = fLeptons.at(*iIt)->DeltaR(*(fLeptons.at(fZLeptonsIndex.second)));
+//      const double deltaR1 = fLeptons.at(*iIt)->DeltaR(*(fLeptons.at(fZLeptonsIndex.first)));
+//      const double deltaR2 = fLeptons.at(*iIt)->DeltaR(*(fLeptons.at(fZLeptonsIndex.second)));
+      const double mass2L1 = (*(fLeptons.at(*iIt)) + *(fLeptons.at(fZLeptonsIndex.first))).M();
+      const double mass2L2 = (*(fLeptons.at(*iIt)) + *(fLeptons.at(fZLeptonsIndex.second))).M();
+//      const double mass2L3 = (*(fLeptons.at(fZLeptonsIndex.first)) + *(fLeptons.at(fZLeptonsIndex.second))).M();
 
-      if (wlPt > WLEPTON_PTCUT && deltaR1 > WZ_DELTARCUT && deltaR2 > WZ_DELTARCUT) {
+      if (wlPt > WLEPTON_PTCUT && /*deltaR1 > WZ_DELTARCUT && deltaR2 > WZ_DELTARCUT*/
+          mass2L1 > MASS2LCUT && mass2L2 > MASS2LCUT) {
 
 // Requirement for W lepton to be TIGHT
 /*
