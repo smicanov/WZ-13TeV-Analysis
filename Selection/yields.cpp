@@ -1,5 +1,5 @@
 #include "WZYields.h"
-#include "WZJets.h"
+#include "WZControlRegionsYields.h"
 #include "MyStyle.h"
 
 #include <string>
@@ -73,6 +73,8 @@ int main(int argc, char **argv)
 
   WZYields* yields = new WZYields(cWZ, fout);
   yields->Init();
+  WZControlRegionsYields* crYields = new WZControlRegionsYields(cWZ, fout);
+  crYields->Init();
 
 // Event loop
   unsigned int nEvents = 0;
@@ -84,6 +86,7 @@ int main(int argc, char **argv)
     cWZ->Read();
 
     yields->Analysis();
+    crYields->Analysis();
   }
 
   cerr << "  100%" << endl << endl;
@@ -92,6 +95,8 @@ int main(int argc, char **argv)
 
   yields->Finish();
   yields->WriteRootFile();
+  crYields->Finish();
+  crYields->WriteRootFile();
 
   fout->Close();
 }

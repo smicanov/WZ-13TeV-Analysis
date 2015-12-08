@@ -54,13 +54,15 @@ public:
 
   Lepton(unsigned int index, double pt, double eta, double phi, double ch);
 
+  virtual double ComputeLeptonScaleFactor() = 0;
+  virtual double ComputeFakeRate() = 0;
+  virtual double ComputePromptRate() = 0;
+
   virtual bool IsTight() = 0;
-  virtual double ComputeScaleFactor() = 0;
 
   int GetPdgId() { return fPdgId; }
   double GetCharge() { return fCharge; }
   double GetRelIso() { return fRelIso; }
-
 
 
 protected:
@@ -81,7 +83,11 @@ public:
 
   bool IsLoose();
   bool IsTight();
-  double ComputeScaleFactor();
+
+  double ComputeLeptonScaleFactor();
+  double ComputeFakeRate();
+  double ComputePromptRate();
+
   bool PassesPtCut();
   bool PassesEtaCut();
 
@@ -97,7 +103,11 @@ public:
 
   bool IsLoose();
   bool IsTight();
-  double ComputeScaleFactor();
+
+  double ComputeLeptonScaleFactor();
+  double ComputeFakeRate();
+  double ComputePromptRate();
+
   bool PassesPtCut();
   bool PassesEtaCut();
 

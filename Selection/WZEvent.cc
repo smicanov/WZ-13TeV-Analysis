@@ -21,6 +21,7 @@ void WZEvent::Clear()
 
   fFinalState = undefined;
   fSelectionLevel = Undefined;
+  fControlRegion = None;
 
 // Empty leptons
   for (vector<Lepton*>::iterator lIt = fLeptons.begin(); lIt != fLeptons.end(); ) {
@@ -104,6 +105,20 @@ WZEvent::PassesTriggerMuonEG()
   if (!(fHLT25ns.at(0)) && !(fHLT25ns.at(1)) && !(fHLT25ns.at(2)) &&
       (fHLT25ns.at(3) || fHLT25ns.at(4)))
     passed = true;
+  return passed;
+}
+
+
+bool
+WZEvent::PassesMETFilters()
+{
+  bool passed = true;
+  if (!metFilters)  return passed;
+
+  if (metFilters >> 0&1 || metFilters >> 1&1 || metFilters >> 2&1 ||
+      metFilters >> 3&1 || metFilters >> 4&1)
+    passed = false;
+
   return passed;
 }
 
@@ -317,6 +332,26 @@ bool WZEvent::PassesFullSelection(SelectionType type)
       if      (wFlavor == 11)  fFinalState = mme;
       else if (wFlavor == 13)  fFinalState = mmm;
     }
+
+    if (type == MatrixMethod) {
+      if (GetWLepton()->IsTight()) {
+        if ((GetZLeptons().first)->IsTight()) {
+          if ((GetZLeptons().second)->IsTight())          fControlRegion = PPP;
+          else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = PFP;
+        } else if (!((GetZLeptons().first)->IsTight())) {
+          if ((GetZLeptons().second)->IsTight())          fControlRegion = FPP;
+          else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = FFP;
+        }
+      } else if (!(GetWLepton()->IsTight())) {
+        if ((GetZLeptons().first)->IsTight()) {
+          if ((GetZLeptons().second)->IsTight())          fControlRegion = PPF;
+          else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = PFF;
+        } else if (!((GetZLeptons().first)->IsTight())) {
+          if ((GetZLeptons().second)->IsTight())          fControlRegion = FPF;
+          else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = FFF;
+        }
+      }
+    }
   }
 
   return passed;
@@ -329,6 +364,31 @@ pair<Lepton*, Lepton*> WZEvent::GetZLeptons()
   Lepton* zL2 = fLeptons.at(fZLeptonsIndex.second);
   pair<Lepton*, Lepton*> zL = make_pair(zL1, zL2);
   return zL;
+}
+
+
+void
+WZEvent::AssignControlRegion()
+{
+  if (PassesFullSelection(MatrixMethod)) {
+    if (GetWLepton()->IsTight()) {
+      if ((GetZLeptons().first)->IsTight()) {
+        if ((GetZLeptons().second)->IsTight())          fControlRegion = PPP;
+        else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = PFP;
+      } else if (!((GetZLeptons().first)->IsTight())) {
+        if ((GetZLeptons().second)->IsTight())          fControlRegion = FPP;
+        else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = FFP;
+      }
+    } else if (!(GetWLepton()->IsTight())) {
+      if ((GetZLeptons().first)->IsTight()) {
+        if ((GetZLeptons().second)->IsTight())          fControlRegion = PPF;
+        else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = PFF;
+      } else if (!((GetZLeptons().first)->IsTight())) {
+        if ((GetZLeptons().second)->IsTight())          fControlRegion = FPF;
+        else if (!((GetZLeptons().second)->IsTight()))  fControlRegion = FFF;
+      }
+    }
+  }
 }
 
 

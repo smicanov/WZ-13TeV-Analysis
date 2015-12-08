@@ -37,10 +37,24 @@ enum SelectionType
 };
 
 
+enum ControlRegion
+{
+  None,  // 0
+  PPP,   // 1
+  PPF,   // 2
+  PFP,   // 3
+  FPP,   // 4
+  FFP,   // 5
+  FPF,   // 6
+  PFF,   // 7
+  FFF    // 8
+};
+
+
 class WZEvent : public WZBASECLASS
 {
 
-  friend class WZSelection;
+  friend class WZYields;
   friend class WZJets;
 
 public:
@@ -54,6 +68,8 @@ public:
   bool PassesTriggerDoubleMuon();
   bool PassesTriggerMuonEG();
 
+  bool PassesMETFilters();
+
   bool PassesPreselection(SelectionType type = Nominal);
   bool PassesZSelection(SelectionType type = Nominal);
   bool PassesWSelection(SelectionType type = Nominal);
@@ -61,9 +77,11 @@ public:
 
   FinalState GetFinalState() { return fFinalState; }
   SelectionLevel GetSelectionLevel() { return fSelectionLevel; }
+  ControlRegion GetControlRegion() { return fControlRegion; }
 
   Lepton* GetWLepton() { return fLeptons.at(fWLeptonIndex); }
   pair<Lepton*, Lepton*> GetZLeptons();
+  void AssignControlRegion();
 
   void Read();
 
@@ -83,6 +101,7 @@ protected:
 
   FinalState fFinalState;
   SelectionLevel fSelectionLevel;
+  ControlRegion fControlRegion;
 
   vector<Lepton*> fLeptons;
   vector<unsigned int> fTightLeptonsIndex;

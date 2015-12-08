@@ -5,6 +5,8 @@
 // Barrel and Endcap
 #define ETASCBARREL  1.479 
 #define ETASCENDCAP  2.5
+#define ELE_ETA_BARREL  1.479
+#define ELE_ETA_ENDCAP  2.5
 
 // electrons ID bits and Pt & Eta cuts
 #define ELELOOSE_BIT  1
@@ -83,6 +85,8 @@
 
 // ## muons ##
 
+#define MU_ETA_BARREL  1.2
+#define MU_ETA_ENDCAP  2.5
 #define GLOBALMUON_BIT  1
 #define TRACKERMUON_BIT  2
 #define PFMUON_BIT  5

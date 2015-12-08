@@ -54,39 +54,39 @@ void WZYields::Init()
                              "#deltaR_{min} (Wl, Zl)", 100, 0, 5);
   }
 
-
   for (int i = 0; i <= 5; i++) {
     yieldsByChannelPreselection[i] = 0;
     yieldsByChannelZSelection[i] = 0;
     yieldsByChannelWSelection[i] = 0;
     yieldsByChannelFullSelection[i] = 0;
+    yieldsByChannelFullSelectionProblematic[i] = 0;
   }
 
-
+/*
   // Setup selected event lists 
   for (int i = 1; i <= 4; i++) {
 
     ostringstream outputFileName1;
-    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_FullSelection_" << i << ".txt";
+    outputFileName1 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_FullSelection_" << i << "_test.txt";
     cout << "File name : " << outputFileName1.str() << endl;
     eventLists1[i-1].open(outputFileName1.str().c_str());
 
     ostringstream outputFileName2;
-    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_WSelection_" << i << ".txt";
+    outputFileName2 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_WSelection_" << i << "_test.txt";
     cout << "File name : " << outputFileName2.str() << endl;
     eventLists2[i-1].open(outputFileName2.str().c_str());
 
     ostringstream outputFileName3;
-    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_ZSelection_" << i << ".txt";
+    outputFileName3 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_ZSelection_" << i << "_test.txt";
     cout << "File name : " << outputFileName3.str() << endl;
     eventLists3[i-1].open(outputFileName3.str().c_str());
 
     ostringstream outputFileName4;
-    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_Preselection_" << i << ".txt";
+    outputFileName4 << "/users/msasa/work/cms/wz/ggAna/code/WZ-13TeV-Analysis/output/yields/synchronization/data/WZ_Preselection_" << i << "_test.txt";
     cout << "File name : " << outputFileName4.str() << endl;
     eventLists4[i-1].open(outputFileName4.str().c_str());
   }
-
+*/
 
   minRun = maxRun = 0;
   runNumber.clear();
@@ -97,40 +97,54 @@ void WZYields::Analysis()
 {
   nAnalyzedEvents++;
 
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesFullSelection() && !(fWZEvent->PassesMETFilters()))
+    cout << "Failed MET Filter !!!\t-\t" << fWZEvent->run << ":" << fWZEvent->lumis << ":" << fWZEvent->event << endl;
+
+  bool test = false;
+  for (vector<Lepton*>::const_iterator lIt = fWZEvent->fLeptons.begin();
+       lIt != fWZEvent->fLeptons.end(); ++lIt)
+    if ((*lIt)->IsTight() && !((*lIt)->IsLoose()))  test = true;
+  if (test)  nSelectedEvents++;
+
   runNumber.push_back(fWZEvent->run);
 
-  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesFullSelection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesFullSelection()) {
     yieldsByChannelFullSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelFullSelection[5]++;
-    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
+//    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
+    if (!((fWZEvent->GetZLeptons().first)->IsLoose()) ||
+        !((fWZEvent->GetZLeptons().second)->IsLoose()) ||
+        !((fWZEvent->GetWLepton())->IsLoose())) {
+      yieldsByChannelFullSelectionProblematic[fWZEvent->GetFinalState()]++;
+      yieldsByChannelFullSelectionProblematic[5]++;
+      cout << "Event info : " << fWZEvent->run << ":" << fWZEvent->lumis << ":" << fWZEvent->event << endl;
+    }
   }
 
-  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesWSelection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesWSelection()) {
     yieldsByChannelWSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelWSelection[5]++;
-    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
+//    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesZSelection()){
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesZSelection()){
     yieldsByChannelZSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelZSelection[5]++;
-    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
+//    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
   }
 
-  if (fWZEvent->PassesTriggerAll() && fWZEvent->PassesPreselection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesPreselection()) {
     yieldsByChannelPreselection[fWZEvent->GetFinalState()]++;
     yieldsByChannelPreselection[5]++;
-    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
+//    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
   }
 
-  if (fWZEvent->PassesTriggerAll()) {
+  if (fWZEvent->PassesTriggerMuonEG()) {
     yieldsByChannelTrigger[fWZEvent->GetFinalState()]++;
     yieldsByChannelTrigger[5]++;
   }
 
-  if (!(fWZEvent->PassesFullSelection()))  return;
-
-  nSelectedEvents++;
+  if (!(fWZEvent->PassesTriggerMuonEG()) || !(fWZEvent->PassesFullSelection()))  return;
 
   const double massZ = (*(fWZEvent->GetZLeptons().first) + *(fWZEvent->GetZLeptons().second)).M();
   const double ptZ = (*(fWZEvent->GetZLeptons().first) + *(fWZEvent->GetZLeptons().second)).Pt();
@@ -251,7 +265,7 @@ void WZYields::Finish()
   cout << endl << "Done." << endl;
 
   cout << "Analyzed events : " << GetNAnalyzed() << "\n"
-       << "Selected events : " << GetNSelected() << "\n\n";
+       << "Problematic events : " << GetNSelected() << "\n\n";
 
   vector<long unsigned int>::iterator min = min_element(runNumber.begin(), runNumber.end());
   minRun = *min;
@@ -261,14 +275,16 @@ void WZYields::Finish()
   cout << "Minimum Run # : " << minRun << "\n"
        << "Maximum Run # : " << maxRun << "\n\n";
 
-  cout << "CHANNEL\tTriggers\tPreselection\tZ Selection\tW Selection\tFull Selection"<< "\n";
+  cout << "CHANNEL\tTriggers\tPreselection\tZ Selection\tW Selection\tFull Selection\t\tProblematic"<< "\n";
   for (int i = 0; i <= 5; i++) {
     cout << i << "\t" << yieldsByChannelTrigger[i]
               << "\t" << yieldsByChannelPreselection[i]
               << "\t" << yieldsByChannelZSelection[i]
               << "\t" << yieldsByChannelWSelection[i]
-              << "\t" << yieldsByChannelFullSelection[i] << "\n";
+              << "\t" << yieldsByChannelFullSelection[i]
+              << "\t\t" << yieldsByChannelFullSelectionProblematic[i] << "\n";
   }
+
   cout << endl;
 }
 

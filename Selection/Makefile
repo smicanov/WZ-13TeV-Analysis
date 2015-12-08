@@ -37,7 +37,7 @@ endef
 all: $(EXES)
 
 
-yields: EventTree_V07_04_14_00.o Particles.o WZEvent.o Generic.o WZYields.o yields.o
+yields: EventTree_V07_04_14_00.o Particles.o WZEvent.o Generic.o WZYields.o WZControlRegionsYields.o yields.o
 
 
 clean:
