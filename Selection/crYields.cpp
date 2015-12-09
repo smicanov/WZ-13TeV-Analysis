@@ -71,8 +71,8 @@ int main(int argc, char **argv)
   cout << endl << "Total number of events: " << events << endl << endl;
   const MyStyle rootStyle(800, 1);
 
-  WZYields* yields = new WZYields(cWZ, fout);
-  yields->Init();
+  WZControlRegionsYields* crYields = new WZControlRegionsYields(cWZ, fout);
+  crYields->Init();
 
 // Event loop
   unsigned int nEvents = 0;
@@ -83,15 +83,15 @@ int main(int argc, char **argv)
     wz_tTree->GetEntry(k);
     cWZ->Read();
 
-    yields->Analysis();
+    crYields->Analysis();
   }
 
   cerr << "  100%" << endl << endl;
 
   cout << "Events read : " << nEvents << endl;
 
-  yields->Finish();
-  yields->WriteRootFile();
+  crYields->Finish();
+  crYields->WriteRootFile();
 
   fout->Close();
 }

@@ -115,8 +115,9 @@ WZEvent::PassesMETFilters()
   bool passed = true;
   if (!metFilters)  return passed;
 
-  if (metFilters >> 0&1 || metFilters >> 1&1 || metFilters >> 2&1 ||
-      metFilters >> 3&1 || metFilters >> 4&1)
+  if (((metFilters >> 0) & 1) == 1 && ((metFilters >> 1) & 1) == 1 &&
+      ((metFilters >> 2) & 1) == 1 && ((metFilters >> 3) & 1) == 1 &&
+      ((metFilters >> 4) & 1) == 1)
     passed = false;
 
   return passed;

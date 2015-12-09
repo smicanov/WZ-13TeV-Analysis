@@ -98,7 +98,7 @@ void WZYields::Analysis()
   nAnalyzedEvents++;
 
   if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesFullSelection() && !(fWZEvent->PassesMETFilters()))
-    cout << "Failed MET Filter !!!\t-\t" << fWZEvent->run << ":" << fWZEvent->lumis << ":" << fWZEvent->event << endl;
+    cout << "Selected event FAILED MET Filter !!!\t-\t" << fWZEvent->run << ":" << fWZEvent->lumis << ":" << fWZEvent->event << endl;
 
   bool test = false;
   for (vector<Lepton*>::const_iterator lIt = fWZEvent->fLeptons.begin();
@@ -108,7 +108,7 @@ void WZYields::Analysis()
 
   runNumber.push_back(fWZEvent->run);
 
-  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesFullSelection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesFullSelection() && fWZEvent->PassesMETFilters()) {
     yieldsByChannelFullSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelFullSelection[5]++;
 //    fWZEvent->Dump(eventLists1[fWZEvent->GetFinalState()-1], 10);
@@ -121,30 +121,30 @@ void WZYields::Analysis()
     }
   }
 
-  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesWSelection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesWSelection() && fWZEvent->PassesMETFilters()) {
     yieldsByChannelWSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelWSelection[5]++;
 //    fWZEvent->Dump(eventLists2[fWZEvent->GetFinalState()-1], 10);
   }
 
-  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesZSelection()){
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesZSelection() && fWZEvent->PassesMETFilters()){
     yieldsByChannelZSelection[fWZEvent->GetFinalState()]++;
     yieldsByChannelZSelection[5]++;
 //    fWZEvent->Dump(eventLists3[fWZEvent->GetFinalState()-1], 7);
   }
 
-  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesPreselection()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesPreselection() && fWZEvent->PassesMETFilters()) {
     yieldsByChannelPreselection[fWZEvent->GetFinalState()]++;
     yieldsByChannelPreselection[5]++;
 //    fWZEvent->Dump(eventLists4[fWZEvent->GetFinalState()-1], 5);
   }
 
-  if (fWZEvent->PassesTriggerMuonEG()) {
+  if (fWZEvent->PassesTriggerMuonEG() && fWZEvent->PassesMETFilters()) {
     yieldsByChannelTrigger[fWZEvent->GetFinalState()]++;
     yieldsByChannelTrigger[5]++;
   }
 
-  if (!(fWZEvent->PassesTriggerMuonEG()) || !(fWZEvent->PassesFullSelection()))  return;
+  if (!(fWZEvent->PassesTriggerMuonEG()) || !(fWZEvent->PassesFullSelection()) || !(fWZEvent->PassesMETFilters()))  return;
 
   const double massZ = (*(fWZEvent->GetZLeptons().first) + *(fWZEvent->GetZLeptons().second)).M();
   const double ptZ = (*(fWZEvent->GetZLeptons().first) + *(fWZEvent->GetZLeptons().second)).Pt();
